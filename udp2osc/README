@@ -1,0 +1,9 @@
+######################################################
+udp2osc
+version: 0.0
+07/16/2015 - CDR/VAIL/CCRMA - Stanford University
+######################################################
+
+This very simple program retrieves the UDP messages from the car simulator, format them into OSC messages and send them
+on a defined port.
+
