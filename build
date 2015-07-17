@@ -1,4 +1,4 @@
 #!/bin/bash
 
-faust2ck faust/pTest.dsp
-mv pTest.chug chuck
+faust2ck faust/SourceSpat.dsp
+mv SourceSpat.chug chuck
