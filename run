@@ -1,0 +1,3 @@
+#!/bin/bash
+
+chuck --channels8 -gchuck/pTest chuck/tst.ck

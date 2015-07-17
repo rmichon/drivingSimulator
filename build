@@ -1,0 +1,4 @@
+#!/bin/bash
+
+faust2ck faust/pTest.dsp
+mv pTest.chug chuck
