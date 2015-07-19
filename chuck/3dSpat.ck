@@ -10,7 +10,7 @@
 // For now, the program can be controlled with the keyboard:
 // 		- q/w: distance
 //		- e/r: angle
-//		- t/y: elevation 
+//		- t/y: elevation
 
 // sound file
 me.sourceDir() + "/helicopter.wav" => string filename;
