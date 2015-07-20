@@ -1,3 +1,4 @@
 #!/bin/bash
 
-chuck --channels15 -gchuck/SourceSpat chuck/3dSpat.ck
+#chuck --channels15 -gchuck/SourceSpat chuck/3dSpat.ck
+chuck --channels10 -gchuck/RoadNoise chuck/OwnShip.ck
