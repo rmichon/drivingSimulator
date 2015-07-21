@@ -2,9 +2,3 @@
 
 faust2ck faust/SourceSpat.dsp
 mv SourceSpat.chug chuck
-
-faust2ck faust/RoadNoise.dsp
-mv RoadNoise.chug chuck
-
-faust2ck faust/CarEngine.dsp
-mv CarEngine.chug chuck

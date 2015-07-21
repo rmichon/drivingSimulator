@@ -1,5 +1,4 @@
-import("effect.lib");
+import("music.lib");
+import("helicopter.dsp");
 
-gain = hslider("gain",1,0,1,0.01);
-
-process = _ <: par(i,8,*(gain));	
+process = helicopter_0 , %(SR*5) ~+(1) : rdtable;

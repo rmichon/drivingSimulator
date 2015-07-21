@@ -1,0 +1,23 @@
+// car.lib
+// CCRMA / CDR/ Renault Project
+// 07/20/15
+// This library declares the different elements used by
+// audioEngine.dsp, the audio engine of the simulator.
+
+import("oscillator.lib");
+import("effect.lib");
+import("filter.lib");
+
+// ROAD NOISE GENERATOR
+// speed should be in MPH
+roadNoise(speed) = noise : resonlp(90+c*50,7,c)
+with{
+	c = speed*0.01;
+};
+
+// CAR ENGINE
+carEngine(nPistons,RPM) = imptrain(freq) : resonlp(freq+10,3,1) : cubicnl(2,0) : ff_fcomb(512,6,1,1) 
+with{
+	baseFreq = 1000/60/nPistons;
+	freq = RPM/60/nPistons;
+};

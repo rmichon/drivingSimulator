@@ -1,6 +1,6 @@
-/* 
-    Simple example of sending an OSC message using oscpack.
-*/
+// udp2osc.cpp
+// CDR/VAIL/CCRMA - Stanford University
+// 07/20/15
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,12 +13,12 @@
 #include "osc/OscOutboundPacketStream.h"
 #include "ip/UdpSocket.h"
 
-#define RECEIVE_PORT 5510
+#define RECEIVE_PORT 8089
 #define SEND_ADDRESS "127.0.0.1"
-#define SEND_PORT 5511
+#define SEND_PORT 5510
 #define BUFFER_SIZE 2048
 
-//#define OUTPUT_BUFFER_SIZE 1024
+#define OSC_BASE_ADDRESS "/audioEngine/"
 
 int main(int argc, char* argv[])
 {
@@ -62,31 +62,31 @@ int main(int argc, char* argv[])
 	
 	/* now loop, receiving data and printing what we received */
 	for (;;) {
-		//printf("waiting on port %d\n", SERVICE_PORT);
 		recvlen = recvfrom(fd, buf, BUFFER_SIZE, 0, (struct sockaddr *)&remaddr, &addrlen);
-		//printf("received %d bytes\n", recvlen);
 		if (recvlen > 0) {
 			buf[recvlen] = 0;
-			//printf("Received: %s\n", inMessage.c_str());
 			
 			// retrieving the data from the udp message
-			// TODO: this will have to be updated in function of what the simulator will give
 			std::string inMessage( buf, buf + sizeof buf / sizeof buf[0] ); // converting the input buffer to a string
-			// retrieving the address
-			unsigned stringBegin = inMessage.find(";");
-			unsigned stringEnd = inMessage.find(":");
-			std::string oscAddress = inMessage.substr(stringBegin+1,stringEnd-stringBegin-1);
-			// retrieving the value
-			stringBegin = inMessage.find(":");
-			stringEnd = inMessage.find(";;");
-			std::string oscValueString = inMessage.substr(stringBegin+1,stringEnd-stringBegin-1);
-			float oscValue = stof(oscValueString);
 			
-			// formating and sending the OSC message
-		    p.Clear();
-		    p << osc::BeginMessage(oscAddress.c_str())
-		            << oscValue << osc::EndMessage;
-		    transmitSocket.Send( p.Data(), p.Size() );
+			int inMessageLength = inMessage.find(";");
+			int nParams = std::count(inMessage.begin(), inMessage.end(), '\n')-1;
+
+			for(int i=0; i<nParams; i++){
+				std::string oscAddress = OSC_BASE_ADDRESS;
+				oscAddress.append(inMessage.substr(0,inMessage.find(":")));
+				std::string oscValueString = inMessage.substr(inMessage.find(":")+1,inMessage.find("\n")-inMessage.find(":")-1);
+				float oscValue = stof(oscValueString);
+				printf("Rec: %s: ",oscAddress.c_str());
+				printf("%f\n", oscValue);
+				inMessage = inMessage.substr(inMessage.find("\n")+1,inMessage.find(";")-inMessage.find("\n"));
+			
+				// formating and sending the OSC message
+		    	p.Clear();
+		    	p << osc::BeginMessage(oscAddress.c_str())
+		        	    << oscValue << osc::EndMessage;
+		    	transmitSocket.Send( p.Data(), p.Size() );
+			}
 		}
 	}
 	/* never exits */

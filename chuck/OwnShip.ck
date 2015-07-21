@@ -1,5 +1,5 @@
-RoadNoise roadNoise => dac.chan(7);
-//SinOsc s => dac.chan(7);
+RoadNoise roadNoise => dac;
+//SinOsc s => dac;
 
 //440 => s.freq;
 
