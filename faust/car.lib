@@ -10,14 +10,71 @@ import("filter.lib");
 
 // ROAD NOISE GENERATOR
 // speed should be in MPH
-roadNoise(speed) = noise : resonlp(90+c*50,7,c)
+roadNoise(speed) = noise : resonlp(90+c*130,7,c)
 with{
-	c = speed*0.01;
+	c = speed*0.01 : smooth(0.999);
 };
 
-// CAR ENGINE
-carEngine(nPistons,RPM) = imptrain(freq) : resonlp(freq+10,3,1) : cubicnl(2,0) : ff_fcomb(512,6,1,1) 
+// CAR ENGINE (OLD)
+carEngineOld(nPistons,RPM) = imptrain(freq) : resonlp(freq+10,3,1) : cubicnl(2,0) : ff_fcomb(512,6,1,1) 
 with{
 	baseFreq = 1000/60/nPistons;
 	freq = RPM/60/nPistons;
 };
+
+// CAR ENGINE
+carEngine(rpm,randomness,turb,compression,brightness) = sparks : resonances : turbulances : cubicnl(compression,0)
+with{
+	RPM = rpm*(1+noise*randomness) : smooth(0.999);
+	ratioRPM = RPM/9000;
+	sparks = lf_imptrain(freq) <: _*(((+~_)%5)<4)
+	with{
+		freq = RPM*0.1/2;
+	};
+	// add more gain to the second resonance to make it sound more like a race car (3 instead of 1)
+	resonances = resonlp(b,3,1) <: resonbp(195,Q1,ratioRPM*5) + resonbp(395,Q2,ratioRPM*1) 
+	with{
+		Q1 = 195/(((RPM<=1600)*ratioRPM*35+35) + (RPM>1600)*70);
+		Q2 = 395/(((RPM<=2500)*ratioRPM*35+35) + (RPM>2500)*70);
+		b = min(ratioRPM*brightness*3,brightness); 
+	};
+	turbulances = *(1-(noise : lowpass(2,3000))*turb*ratioRPM);
+};
+
+// OWNSHIP FILTER
+ownshipFilter(freq) = lowpass(4,freq);
+
+// 3D SOURCE SPATIALIZER
+sourceSpat(angle,elev,distance) = 
+	doppler(distance)*distance <: 
+	(*(1-min(1,elevation)) : oneRing(nSpeakersR1, angle, spread)), // ground ring
+	(*(elevation*(elevation <= 1) + (1-(elevation-1))*(elevation > 1)) : oneRing(nSpeakersR2, angle, spread)), // upper ring
+	*(elevation/1.5) : // top
+	outputPatch
+	with{
+		nSpeakersR1 = 4; // shouldn't be changed...
+		nSpeakersR2 = 4;
+		// simple doppler effect (feedforward filter)
+		doppler(pos) = _ <: _+fdelay2(32,L) : *(0.5)
+		with{
+			MaxDel = 15*(SR/48000);
+			L = MaxDel*(1-pos);
+		};
+		// one ring of speakers with "n" the number of speakers, "a" the angle (0-1) and "d" the distance (spread)
+		oneRing(n,a,d)	= _ <: par(i, n, *( scaler(i, n, a, d) : smooth(0.999)))
+		with {
+			// channel scaling coefficient
+			scaler(i,n,a,d) = (d/2.0+0.5)*sqrt(max(0.0, 1.0 - abs(fmod(a+0.5+float(n-i)/n, 1.0) - 0.5)*n*d));
+		};
+		elevation = elev*1.5;
+		spread = distance*0.5+0.5;
+		outputPatch(l0,l1,l2,l3,h0,h1,h2,h3,t0) = 
+			l0,l1,l3,l2, // ground ring
+			h0,h1,h3,h2,t0, // upper ring
+			(l0+l3+h0+h3),(l1+l2+h1+h2),(l0+l3+h0+h3),(l1+l2+h1+h2), // ownship speakers
+			0 // dead channel
+		;
+	}
+;
+
+

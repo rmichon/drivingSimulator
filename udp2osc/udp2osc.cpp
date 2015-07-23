@@ -69,23 +69,27 @@ int main(int argc, char* argv[])
 			// retrieving the data from the udp message
 			std::string inMessage( buf, buf + sizeof buf / sizeof buf[0] ); // converting the input buffer to a string
 			
-			int inMessageLength = inMessage.find(";");
-			int nParams = std::count(inMessage.begin(), inMessage.end(), '\n')-1;
+			// counting the number of semicolons to detect the number of messages in the packet
+			int nParams = std::count(inMessage.begin(), inMessage.end(), ';')-2;
 
 			for(int i=0; i<nParams; i++){
 				std::string oscAddress = OSC_BASE_ADDRESS;
 				oscAddress.append(inMessage.substr(0,inMessage.find(":")));
-				std::string oscValueString = inMessage.substr(inMessage.find(":")+1,inMessage.find("\n")-inMessage.find(":")-1);
-				float oscValue = stof(oscValueString);
-				printf("Rec: %s: ",oscAddress.c_str());
-				printf("%f\n", oscValue);
-				inMessage = inMessage.substr(inMessage.find("\n")+1,inMessage.find(";")-inMessage.find("\n"));
+				std::string oscValueString = inMessage.substr(inMessage.find(":")+1,inMessage.find(";")-inMessage.find(":")-1);
+				// making sure that the received message is valid
+				if(!std::all_of(oscValueString.begin(), oscValueString.end(), ::isdigit)){
+					float oscValue = stof(oscValueString);
+					//printf("Rec: %s: ",oscAddress.c_str());
+					//printf("%f\n", oscValue);
+					inMessage = inMessage.substr(inMessage.find("\n")+1,inMessage.find(";;")-inMessage.find("\n"));
 			
-				// formating and sending the OSC message
-		    	p.Clear();
-		    	p << osc::BeginMessage(oscAddress.c_str())
+					// formating and sending the OSC message
+		    		p.Clear();
+		    		p << osc::BeginMessage(oscAddress.c_str())
 		        	    << oscValue << osc::EndMessage;
-		    	transmitSocket.Send( p.Data(), p.Size() );
+		    		transmitSocket.Send( p.Data(), p.Size() );
+		    	}
+		    	else printf("Dropped message\n");
 			}
 		}
 	}
