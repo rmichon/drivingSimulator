@@ -1,4 +1,8 @@
 #!/bin/bash
 
-faust2ck faust/SourceSpat.dsp
-mv SourceSpat.chug chuck
+cd faust
+faust2caqt -osc audioEngine.dsp
+cd ..
+cd udp2osc
+make
+cd ..
