@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -r faust/audioEngine.app
+rm -r faust/SimulatorAudioEngine.app
 cd udp2osc
 make clean
 cd ..

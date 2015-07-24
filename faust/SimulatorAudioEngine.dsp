@@ -11,13 +11,14 @@
 
 import("car.lib");
 import("helicopter.dsp");
+import("ambulance.dsp");
 
 //#######################
 // PARAMETERS
 //#######################
 
-engine_RPM = hslider("[2]VehRPM",1000,500,9000,0.01)+300;
-speed = hslider("[3]VehSpeedMPH",0,0,100,0.01);
+engine_RPM = hslider("[2]VehRPM",1000,500,9000,0.01)+300 : smooth(0.999);
+speed = hslider("[3]VehSpeedMPH",0,0,100,0.01) : smooth(0.999);
 engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.5,0,1,0.01); 
 engine_turbulances = hslider("h:[1]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
 engine_compression = hslider("h:[1]ownship/[2]engine_compression[style:knob]",0.8,0,1,0.01);
@@ -66,26 +67,26 @@ ownshipSounds =
 ;
 
 // abstraction of the source spatializer with "i" the iteration number
-sourceSpatInst(i) = sourceSpat(angle,elevation,distance) : 
+sourceSpatInst(i) = sourceSpat(x,y,z) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
-with{
-	x = hslider("h:source%i/x[style:knob]",30,-30,30,0.01)/30;
-	y = hslider("h:source%i/y[style:knob]",30,-30,30,0.01)/30;
-	z = hslider("h:source%i/z[style:knob]",30,-30,30,0.01)/30;
-	
-	angle = atan(y/x)/PI <: *(_<=1) + (_-1)*(_>1); // TODO that line is wrong
-	elevation = z; 
-	distance = sqrt(pow(1-x,2) + pow(1-y,2) + pow(1-z,2));
+	with{		 
+		x = hslider("h:source%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:source%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		z = hslider("h:source%i/z[style:knob]",30,0,30,0.01)/30 : smooth(0.999);
+};
 
-	//angle = hslider("h:source%i/angle[style:knob]", 0.0, 0, 1, 0.01)+0.125 <: *(_<=1) + (_-1)*(_>1);
-	//elevation = hslider("h:source%i/elevation[style:knob]",0,0,1,0.01);
-	//distance = hslider("h:source%i/distance[style:knob]", 0.5, 0, 1, 0.01);
+movCar(i) = movingCar(distance) : sourceSpat(x,y,0) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{		 
+		x = hslider("h:source%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:source%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		distance = 1-(sqrt(2) - sqrt(pow(x,2)+pow(y,2)))/sqrt(2);
 };
 
 // different spatialized sound sources
 spatSound(0) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(0);
-spatSound(1) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(1);
-spatSound(2) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(2);
+spatSound(1) = movCar(1);
+spatSound(2) = ambulance_0 , %(16944) ~+(1) : rdtable : sourceSpatInst(2);
 spatSound(3) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(3);
 spatSound(4) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(4);
 

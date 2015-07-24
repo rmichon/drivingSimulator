@@ -1,4 +1,4 @@
 #!/bin/bash
 
-killall audioEngine
+killall SimulatorAudioEngine
 killall udp2osc

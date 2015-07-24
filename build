@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd faust
-faust2caqt -osc audioEngine.dsp
+faust2caqt -osc SimulatorAudioEngine.dsp
 cd ..
 cd udp2osc
 make

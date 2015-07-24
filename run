@@ -1,6 +1,4 @@
 #!/bin/bash
 
 ./udp2osc/udp2osc &
-./faust/audioEngine.app/Contents/MacOS/audioEngine &
-
-#chuck --channels15 -gchuck/SourceSpat chuck/3dSpat.ck
+./faust/SimulatorAudioEngine.app/Contents/MacOS/SimulatorAudioEngine &

@@ -12,7 +12,7 @@ import("filter.lib");
 // speed should be in MPH
 roadNoise(speed) = noise : resonlp(90+c*130,7,c)
 with{
-	c = speed*0.01 : smooth(0.999);
+	c = speed*0.01;
 };
 
 // CAR ENGINE (OLD)
@@ -41,6 +41,8 @@ with{
 	turbulances = *(1-(noise : lowpass(2,3000))*turb*ratioRPM);
 };
 
+movingCar(distance) = noise*0.4 : resonlp(1500-(1400*distance),7,1);
+
 // OWNSHIP FILTER
 ownshipFilter(freq) = lowpass(4,freq);
 
@@ -48,7 +50,7 @@ ownshipFilter(freq) = lowpass(4,freq);
 ownshipSubFilter(freq) = lowpass(4,freq);
 
 // 3D SOURCE SPATIALIZER
-sourceSpat(angle,elev,distance) = 
+sourceSpat(x,y,z) = 
 	doppler(distance)*distance <: 
 	(*(1-min(1,elevation)) : oneRing(nSpeakersR1, angle, spread)), // ground ring
 	(*(elevation*(elevation <= 1) + (1-(elevation-1))*(elevation > 1)) : oneRing(nSpeakersR2, angle, spread)), // upper ring
@@ -57,14 +59,32 @@ sourceSpat(angle,elev,distance) =
 	with{
 		nSpeakersR1 = 4; // shouldn't be changed...
 		nSpeakersR2 = 4;
+
+		XYToTheta(x,y,offset) = 
+			atan(y_n0/x_n0) + (x_n0<0)*PI + ((x_n0>=0) & (y_n0<0))*2*PI : /(2*PI) : -(offset) <: 
+			*(_>=0) + (_+offset+(1-offset))*(_<0)
+			with{
+				nonZero = _ <: (_==0)*0.00000000001 + (_!=0)*_;
+				x_n0 = nonZero(x);
+				y_n0 = nonZero(y);
+			}
+		;
+
+		angle = 1-XYToTheta(x,y,0.375);
+		elev = z; 
+		//distance = (sqrt(3)-sqrt(pow(x,2) + pow(y,2) + pow(z,2)))/sqrt(3);
+		distance = (sqrt(2)-sqrt(pow(x,2) + pow(y,2)))/sqrt(2);
+
 		// simple doppler effect (feedforward filter)
 		doppler(pos) = _ <: _+fdelay2(32,L) : *(0.5)
 		with{
-			MaxDel = 15*(SR/48000);
-			L = MaxDel*(1-pos);
+			MaxDel = 40*(SR/48000);
+			// The smooth here prevents discontinuity if the direction of the car suddenly changes
+			// but it might be futile in the case of the simulator...
+			L = MaxDel*( (1-pos)*(pos>=pos') + (pos)*(pos<pos') ) : smooth(0.999);
 		};
 		// one ring of speakers with "n" the number of speakers, "a" the angle (0-1) and "d" the distance (spread)
-		oneRing(n,a,d)	= _ <: par(i, n, *( scaler(i, n, a, d) : smooth(0.999)))
+		oneRing(n,a,d)	= _ <: par(i, n, *( scaler(i, n, a, d)))
 		with {
 			// channel scaling coefficient
 			scaler(i,n,a,d) = (d/2.0+0.5)*sqrt(max(0.0, 1.0 - abs(fmod(a+0.5+float(n-i)/n, 1.0) - 0.5)*n*d));
