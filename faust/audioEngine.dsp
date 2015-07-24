@@ -73,7 +73,7 @@ with{
 	y = hslider("h:source%i/y[style:knob]",30,-30,30,0.01)/30;
 	z = hslider("h:source%i/z[style:knob]",30,-30,30,0.01)/30;
 	
-	angle = atan(y/x)/PI*0.5+0.5+0.325 <: *(_<=1) + (_-1)*(_>1);
+	angle = atan(y/x)/PI <: *(_<=1) + (_-1)*(_>1); // TODO that line is wrong
 	elevation = z; 
 	distance = sqrt(pow(1-x,2) + pow(1-y,2) + pow(1-z,2));
 
