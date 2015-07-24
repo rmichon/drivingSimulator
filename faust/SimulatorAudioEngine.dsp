@@ -1,6 +1,6 @@
 // audioEngine.dsp
 // CCRMA / CDR/ Renault Project
-// 07/20/15
+// 07/24/15
 //
 // This Faust object is the "final product" that puts the different
 // sound generators together. It receives the OSC messages from the
@@ -75,6 +75,7 @@ sourceSpatInst(i) = sourceSpat(x,y,z) :
 		z = hslider("h:source%i/z[style:knob]",30,0,30,0.01)/30 : smooth(0.999);
 };
 
+// special case of the source spatilizer for a moving car
 movCar(i) = movingCar(distance) : sourceSpat(x,y,0) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 

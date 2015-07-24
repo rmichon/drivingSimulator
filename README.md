@@ -4,18 +4,14 @@ This repository contains the different softwares developed in the Frame of the R
 
 # Content
 
-- ./build: build the different elements except for udp2osc
+- ./build: build the different elements
 
-- ./clean: removes the compiled objects except for udp2osc
+- ./clean: removes the compiled objects
 
 - ./run: launch the sound engine
 
-- ./chuck: the chuck codes
+- ./stop: stop the sound engine
 
 - ./faust: the faust codes
 
-- ./udp2osc: a very simple program that retrieves the UDP messages from the car simulator, format them into OSC messages and send them on a defined port. Type "make" in this folder to build the program.
-
-# TODO
-
-- build and clean should be replaced by a makefile but it's fine for now...
+- ./udp2osc: a very simple program that retrieves the UDP messages from the car simulator, format them into OSC messages and send them on a defined port.

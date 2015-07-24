@@ -1,6 +1,6 @@
 // car.lib
 // CCRMA / CDR/ Renault Project
-// 07/20/15
+// 07/24/15
 // This library declares the different elements used by
 // audioEngine.dsp, the audio engine of the simulator.
 
@@ -9,7 +9,8 @@ import("effect.lib");
 import("filter.lib");
 
 // ROAD NOISE GENERATOR
-// speed should be in MPH
+// Parameters:
+// 		- speed (in MPH)
 roadNoise(speed) = noise : resonlp(90+c*130,7,c)
 with{
 	c = speed*0.01;
@@ -23,7 +24,17 @@ with{
 };
 
 // CAR ENGINE
-carEngine(rpm,randomness,turb,compression,brightness) = sparks : resonances : turbulances : cubicnl(compression,0)
+// Parameters:
+// 		- rpm: RPM (500-9000)
+//		- randomness: controls the regularity of the engine (0-1)
+// 		- turb: amount of turbulances added to the engine (0-1)
+//		- compression: for more "roaring" (0-1)
+//		- brightness: can be used mainly to control the type of engine (freq around 400Hz)
+// This algorithm is protected by a patent (check the licence informations at the bottom of this file)
+// MoForte Inc. has granted authorization to VAIL to use this algorithm for research purposes
+declare copyright "Car Engine Physical Model: Copyright 2015 moForte. All rights reserved";
+carEngine(rpm,randomness,turb,compression,brightness) = 
+sparks : resonances : turbulances : cubicnl(compression,0)
 with{
 	RPM = rpm*(1+noise*randomness) : smooth(0.999);
 	ratioRPM = RPM/9000;
@@ -41,25 +52,40 @@ with{
 	turbulances = *(1-(noise : lowpass(2,3000))*turb*ratioRPM);
 };
 
+// MOVING CAR
+// Parameters:
+// 		- Normalized distance (0-1)
 movingCar(distance) = noise*0.4 : resonlp(1500-(1400*distance),7,1);
 
 // OWNSHIP FILTER
+// Parameters:
+// 		freq: cut-off frequency
 ownshipFilter(freq) = lowpass(4,freq);
 
 // OWNSHIP SUB FILTER
+// Parameters:
+// 		freq: cut-off frequency
 ownshipSubFilter(freq) = lowpass(4,freq);
 
 // 3D SOURCE SPATIALIZER
+// This function spatializes a mono source in the 3D plan and implements doppler effect
+// if the source is moving
+// Parameters:
+// 		x: normalized x distance from source (0-1)
+//		y: normalized y distance from source (0-1)
+//		z: normalized z distance from source (0-1)
 sourceSpat(x,y,z) = 
 	doppler(distance)*distance <: 
 	(*(1-min(1,elevation)) : oneRing(nSpeakersR1, angle, spread)), // ground ring
 	(*(elevation*(elevation <= 1) + (1-(elevation-1))*(elevation > 1)) : oneRing(nSpeakersR2, angle, spread)), // upper ring
-	*(elevation/1.5) : // top
-	outputPatch
+	*(elevation/1.5) : // top speaker
+	outputPatch // routing
 	with{
 		nSpeakersR1 = 4; // shouldn't be changed...
 		nSpeakersR2 = 4;
 
+		// converts cartesian coordinates to polar coordinates
+		// an offset defined as a normalized angle (0-1) can be added
 		XYToTheta(x,y,offset) = 
 			atan(y_n0/x_n0) + (x_n0<0)*PI + ((x_n0>=0) & (y_n0<0))*2*PI : /(2*PI) : -(offset) <: 
 			*(_>=0) + (_+offset+(1-offset))*(_<0)
@@ -72,13 +98,15 @@ sourceSpat(x,y,z) =
 
 		angle = 1-XYToTheta(x,y,0.375);
 		elev = z; 
+
+		// distance is only based on x and y, but z could be added if necessary...
 		//distance = (sqrt(3)-sqrt(pow(x,2) + pow(y,2) + pow(z,2)))/sqrt(3);
 		distance = (sqrt(2)-sqrt(pow(x,2) + pow(y,2)))/sqrt(2);
 
 		// simple doppler effect (feedforward filter)
 		doppler(pos) = _ <: _+fdelay2(32,L) : *(0.5)
 		with{
-			MaxDel = 40*(SR/48000);
+			MaxDel = 40*(SR/48000); // "40" is pretty random here and could probably be adjusted
 			// The smooth here prevents discontinuity if the direction of the car suddenly changes
 			// but it might be futile in the case of the simulator...
 			L = MaxDel*( (1-pos)*(pos>=pos') + (pos)*(pos<pos') ) : smooth(0.999);
@@ -89,15 +117,78 @@ sourceSpat(x,y,z) =
 			// channel scaling coefficient
 			scaler(i,n,a,d) = (d/2.0+0.5)*sqrt(max(0.0, 1.0 - abs(fmod(a+0.5+float(n-i)/n, 1.0) - 0.5)*n*d));
 		};
-		elevation = elev*1.5;
+		elevation = elev*1.5; // 1.5 because of the top speaker: dirty but does the trick
 		spread = distance*0.5+0.5;
 		outputPatch(l0,l1,l2,l3,h0,h1,h2,h3,t0) = 
 			l0,l1,l3,l2,0, // ground ring
 			h0,h1,h3,h2,t0, // upper ring
 			(l0+h0),(l1+h1),(l3+h3),(l2+h2) // ownship speakers
-			 // dead channel
 		;
 	}
 ;
 
+// CAR ENGINE PHYSICAL MODEL LICENCE:
+// From the Staccato Systems, Inc. car egine physical model.
+// For questions ask Romain Michon (rmichon@ccrma.stanford.edu)
+//
+// COMMERCIAL REDISTRIBUTION IS BY PERMISSION ONLY
+//
+// moForte, inc.
+// 286 Carmelita
+// Mountain View, CA 94040
+// gps@moforte.com
+// http://www.moforte.com
+//
+//
+// moForte, inc. ("moForte") grants to you
+// a non-exclusive, non-sublicensable, license to use
+// the car engine audio model ("engine.dsp")
+// free of charge, for educational, evaluation or
+// trial use purposes only.
+//
+// DISCLAIMER OF WARRANTY.
+//
+// The software is provided 'AS IS' without express
+// or implied warranties, including warranties of
+// merchantability and fitness for a particular
+// purpose or non-infringement.  This software is
+// provided gratuitously and accordingly, moForte
+// shall not be liable under any theory or any
+// damages suffered by you or any user of the
+// software.
+//
+// TITLE.
+//
+// Title, ownership rights, and intellectual property
+// rights in and to the Software shall remain in
+// moForte. The Software is protected by the
+// copyright laws and treaties.  You acknowledge that
+// the Software in source code form remains a
+// confidential trade secret of moForte and
+// therefore you agree not to modify the Software or
+// attempt to decipher, decompile, disassemble or
+// reverse engineer the Software, except to the
+// extent applicable laws specifically prohibit such
+// restriction.
+//
+// Title and related rights in the content accessed
+// through the Software is the property of the
+// applicable content owner and may be protected by
+// applicable law. This License gives you no rights
+// to such content.
+//
+// TERMINATION.
+//
+// The license will terminate automatically if you
+// fail to comply with the limitations described
+// herein.  On termination, you must destroy all
+// copies of the Software and Documentation.
+//
+// MISCELLANEOUS.
+//
+// This Agreement shall be governed by California law
+// (except for conflict of law provisions). The
+// application the United Nations Convention of
+// Contracts for the International Sale of Goods is
+// expressly excluded.
 

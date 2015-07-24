@@ -1,6 +1,6 @@
 // udp2osc.cpp
 // CDR/VAIL/CCRMA - Stanford University
-// 07/20/15
+// 07/24/15
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -95,23 +95,6 @@ int main(int argc, char* argv[])
 	}
 	/* never exits */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
