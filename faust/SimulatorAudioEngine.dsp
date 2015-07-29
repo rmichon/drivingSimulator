@@ -21,18 +21,18 @@ engine_RPM = hslider("[2]VehRPM",1000,500,9000,0.01)+300 : smooth(0.999);
 speed = hslider("[3]VehSpeedMPH",0,0,100,0.01) : smooth(0.999);
 engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.5,0,1,0.01); 
 engine_turbulances = hslider("h:[1]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
-engine_compression = hslider("h:[1]ownship/[2]engine_compression[style:knob]",0.8,0,1,0.01);
-engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",400,50,5000,1);
+engine_compression = hslider("h:[1]ownship/[2]engine_compression[style:knob]",0.6,0,1,0.01);
+engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",195,50,5000,1);
 ownship_freq = hslider("h:[1]ownship/[4]cutoffFreq[style:knob]",300,50,3000,0.1);
-engine_gain = hslider("h:[1]ownship/[5]engine_gain[style:knob]",0.8,0,1,0.01);
+engine_gain = hslider("h:[1]ownship/[5]engine_gain[style:knob]",0.9,0,1,0.01);
 roadNoise_gain = hslider("h:[1]ownship/[6]roadNoise_gain[style:knob]",1,0,1,0.01);
 
 simulator_bridge_gain = hslider("h:[0]gains/[0]simulator_bridge_gain[style:knob]",1,0,1,0.01);
-ownshipToOutside_gain = hslider("h:[0]gains/[1]ownshipToOutside_gain[style:knob]",0.5,0,1,0.01);
-ownshipToOwnship_gain = hslider("h:[0]gains/[2]ownshipToOwnship_gain[style:knob]",1,0,1,0.01);
+ownshipToOutside_gain = hslider("h:[0]gains/[1]ownshipToOutside_gain[style:knob]",1.0,0,1,0.01);
+ownshipToOwnship_gain = hslider("h:[0]gains/[2]ownshipToOwnship_gain[style:knob]",0.3,0,1,0.01);
 ownshipToOwnshipSub_gain = hslider("h:[0]gains/[3]ownshipToOwnshipSub_gain[style:knob]",1,0,1,0.01);
 sourcesToOutside_gain = hslider("h:[0]gains/[4]sourcesToOutside_gain[style:knob]",1,0,1,0.01);
-sourcesToOwnship_gain = hslider("h:[0]gains/[5]sourcesToOwnship_gain[style:knob]",0.5,0,1,0.01);
+sourcesToOwnship_gain = hslider("h:[0]gains/[5]sourcesToOwnship_gain[style:knob]",0.8,0,1,0.01);
 
 //#######################
 // DSP
@@ -55,19 +55,16 @@ simulatorBridge(frontLeft,frontRight,rearLeft,rearRight,frontCenter,carSub) =
 // driver's car sounds
 ownshipSounds =
 		// car engine
-		carEngine(engine_RPM,engine_randomness,engine_turbulances,engine_compression,engine_brightness)*engine_gain,
-		// road noise
-		roadNoise(speed)*roadNoise_gain
-		// splitting to the 4 ownship speakers
-		:> _ <: 
+		carEngine(engine_RPM,engine_randomness,engine_turbulances,engine_compression,engine_brightness)*engine_gain
+		<: 
 		par(i,4,*(ownshipToOutside_gain)), 
 		par(i,6,0), 
-		par(i,4,*(ownshipToOwnship_gain)), 
-		*(ownshipToOwnshipSub_gain)
+		(roadNoise(speed)*roadNoise_gain*2 + _ <: // road noise only going to ownship
+			(par(i,4,*(ownshipToOwnship_gain)), *(ownshipToOwnshipSub_gain)))
 ;
 
 // abstraction of the source spatializer with "i" the iteration number
-sourceSpatInst(i) = sourceSpat(x,y,z) : 
+sourceSpatInst(i) = sourceSpatXYZ(x,y,z) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
 		x = hslider("h:source%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
@@ -76,7 +73,7 @@ sourceSpatInst(i) = sourceSpat(x,y,z) :
 };
 
 // special case of the source spatilizer for a moving car
-movCar(i) = movingCar(distance) : sourceSpat(x,y,0) : 
+movCar(i) = movingCar(distance) : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
 		x = hslider("h:source%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
@@ -92,7 +89,7 @@ spatSound(3) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(3);
 spatSound(4) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(4);
 
 // car speakers output
-ownshipOut = par(i,4,ownshipFilter(ownship_freq)),ownshipSubFilter(150);
+ownshipOut = par(i,4,ownshipFilter(ownship_freq)),ownshipSubFilter(90);
 
 // routing the signals to the right channels
 outputPatch(lowFrontLeft,lowFrontRight,lowRearLeft,lowRearRight,lowFrontCenter,highFrontLeft,highFrontRight,highRearLeft,highRearRight,highCenter,ownshipFrontLeft,ownshipFrontRight,ownshipRearLeft,ownshipRearRight,
