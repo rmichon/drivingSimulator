@@ -34,9 +34,9 @@ with{
 // MoForte Inc. has granted authorization to VAIL to use this algorithm for research purposes
 declare copyright "Car Engine Physical Model: Copyright 2015 moForte. All rights reserved";
 carEngine(rpm,randomness,turb,compression,brightness) = 
-sparks : resonances : turbulances : cubicnl(compression,0)
+sparks : resonances : turbulances : cubicnl(compression,0) : lowpass(4,150)
 with{
-	RPM = rpm*(1+noise*randomness) : smooth(0.999);
+	RPM = rpm*(1+noise*randomness)+300 : smooth(0.999);
 	ratioRPM = RPM/9000;
 	sparks = lf_imptrain(freq) <: _*(((+~_)%5)<4)
 	with{
