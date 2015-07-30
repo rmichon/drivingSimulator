@@ -25,9 +25,9 @@ speed = hslider("[3]VehSpeedMPH",0,0,100,0.01) : smooth(0.999);
 engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.5,0,1,0.01); 
 engine_turbulances = hslider("h:[1]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
 engine_compression = hslider("h:[1]ownship/[2]engine_compression[style:knob]",0.6,0,1,0.01);
-engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",195,50,5000,1);
+engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",150,50,5000,1);
 ownship_freq = hslider("h:[1]ownship/[4]cutoffFreq[style:knob]",300,50,3000,0.1);
-engine_gain = hslider("h:[1]ownship/[5]engine_gain[style:knob]",0.9,0,1,0.01);
+engine_gain = hslider("h:[1]ownship/[5]engine_gain[style:knob]",1,0,1,0.01);
 roadNoise_gain = hslider("h:[1]ownship/[6]roadNoise_gain[style:knob]",1,0,1,0.01);
 
 simulator_bridge_gain = hslider("h:[0]gains/[0]simulator_bridge_gain[style:knob]",1,0,1,0.01);
@@ -36,7 +36,7 @@ ownshipToOwnship_gain = hslider("h:[0]gains/[2]ownshipToOwnship_gain[style:knob]
 ownshipToOwnshipSub_gain = hslider("h:[0]gains/[3]ownshipToOwnshipSub_gain[style:knob]",1,0,1,0.01);
 sourcesToOutside_gain = hslider("h:[0]gains/[4]sourcesToOutside_gain[style:knob]",1,0,1,0.01);
 sourcesToOwnship_gain = hslider("h:[0]gains/[5]sourcesToOwnship_gain[style:knob]",0.8,0,1,0.01);
-sounscape_gain = hslider("h:[0]gains/[5]soundscape_gain[style:knob]",0.5,0,1,0.01);
+sounscape_gain = hslider("h:[0]gains/[5]soundscape_gain[style:knob]",0.02,0,1,0.01);
 
 //#######################
 // DSP
@@ -88,10 +88,18 @@ movCar(i) = movingCar(distance) : sourceSpatXY(x,y) :
 // different spatialized sound sources
 spatSound(0) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(0);
 spatSound(1) = ambulance_0 , %(16944) ~+(1) : rdtable : sourceSpatInst(1);
-spatSound(2) = bicycleBell_0 , %(35350) ~+(1) : rdtable : sourceSpatInst(2);
 
 // countryside soundscape
 countryScape = (countrysideL_0, %(396706) ~+(1) : rdtable*sounscape_gain), (countrysideR_0, %(396706) ~+(1) : rdtable*sounscape_gain) : stereoToSoundScape;
+
+// bicycle
+bicycle = bicycleBell_0 , ((min(35350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{
+		on = button("h:bicycle/on");	 
+		x = hslider("h:bicycle/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:bicycle/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+};
 
 // car speakers output
 ownshipOut = par(i,4,ownshipFilter(ownship_freq)),ownshipSubFilter(90);
@@ -108,6 +116,7 @@ audioEngine = vgroup("audioEngine",
 	simulatorBridge,
 	par(i,2,spatSound(i)),
 	par(i,10,movCar(i)),
+	bicycle,
 	countryScape,
 	ownshipSounds  
 	:>
