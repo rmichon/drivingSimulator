@@ -184,6 +184,10 @@ sourceSpatXYZ(x,y,z) =
 	}
 ;
 
+// STEREO TO SOUNDSCAPE
+// Takes a stereo sound and spatialize it in the simulator
+stereoToSoundScape(l,r) = l,r,l,r,0,l,r,l,r,par(i,6,0);
+
 // CAR ENGINE PHYSICAL MODEL LICENCE:
 // From the Staccato Systems, Inc. car egine physical model.
 // For questions ask Romain Michon (rmichon@ccrma.stanford.edu)
