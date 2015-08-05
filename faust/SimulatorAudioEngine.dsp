@@ -15,6 +15,9 @@ import("ambulance.dsp");
 import("countrysideL.dsp");
 import("countrysideR.dsp");
 import("bicycleBell.dsp");
+import("dogbark.dsp");
+import("child.dsp");
+import("clank.dsp");
 
 //#######################
 // PARAMETERS
@@ -90,7 +93,7 @@ spatSound(0) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(0);
 spatSound(1) = ambulance_0 , %(16944) ~+(1) : rdtable : sourceSpatInst(1);
 
 // countryside soundscape
-countryScape = (countrysideL_0, %(396706) ~+(1) : rdtable*sounscape_gain), (countrysideR_0, %(396706) ~+(1) : rdtable*sounscape_gain) : stereoToSoundScape;
++countryScape = (countrysideL_0, %(295877) ~+(1) : rdtable*sounscape_gain), (countrysideR_0, %(295877) ~+(1) : rdtable*sounscape_gain) : stereoToSoundScape;
 
 // bicycle
 bicycle = bicycleBell_0 , ((min(35350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
@@ -99,6 +102,34 @@ bicycle = bicycleBell_0 , ((min(35350)*on) ~+(1) : int) : rdtable : sourceSpatXY
 		on = button("h:bicycle/on");	 
 		x = hslider("h:bicycle/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		y = hslider("h:bicycle/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+};
+
+// dogbark
+dogwoof = dogbark_0 , ((min(18350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{
+		on = button("h:dogbark/on");	 
+		x = hslider("h:dogbark/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:dogbark/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+};
+
+// child
+childtalk = child_0 , ((min(110350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{
+		on = button("h:child/on");	 
+		x = hslider("h:child/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:child/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+};
+
+// clank
+pipeclank = clank_0 , ((min(37350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{
+		on = button("h:clank/on");	
+		//gain = button("h:clank/gain"); 
+		x = hslider("h:clank/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:clank/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 };
 
 // car speakers output
@@ -115,8 +146,11 @@ carSub) =
 audioEngine = vgroup("audioEngine",
 	simulatorBridge,
 	par(i,2,spatSound(i)),
-	par(i,10,movCar(i)),
+	//par(i,10,movCar(i)),
 	bicycle,
+	dogwoof,
+	childtalk,
+	pipeclank,
 	countryScape,
 	ownshipSounds  
 	:>
