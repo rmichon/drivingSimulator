@@ -90,7 +90,7 @@ spatSound(0) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(0);
 spatSound(1) = ambulance_0 , %(16944) ~+(1) : rdtable : sourceSpatInst(1);
 
 // countryside soundscape
-countryScape = (countrysideL_0, %(396706) ~+(1) : rdtable*sounscape_gain), (countrysideR_0, %(396706) ~+(1) : rdtable*sounscape_gain) : stereoToSoundScape;
+countryScape = (countrysideL_0, %(295877) ~+(1) : rdtable*sounscape_gain), (countrysideR_0, %(295877) ~+(1) : rdtable*sounscape_gain) : stereoToSoundScape;
 
 // bicycle
 bicycle = bicycleBell_0 , ((min(35350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
