@@ -146,7 +146,7 @@ carSub) =
 audioEngine = vgroup("audioEngine",
 	simulatorBridge,
 	par(i,2,spatSound(i)),
-	//par(i,10,movCar(i)),
+	par(i,10,movCar(i)),
 	bicycle,
 	dogwoof,
 	childtalk,
