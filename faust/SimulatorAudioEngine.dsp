@@ -12,8 +12,14 @@
 import("car.lib");
 import("helicopter.dsp");
 import("ambulance.dsp");
+
 import("countrysideL.dsp");
 import("countrysideR.dsp");
+import("CitySkylineL.dsp");
+import("CitySkylineR.dsp");
+import("carParkL.dsp");
+import("carParkR.dsp");
+
 import("bicycleBell.dsp");
 import("dogbark.dsp");
 import("child.dsp");
@@ -39,7 +45,10 @@ ownshipToOwnship_gain = hslider("h:[0]gains/[2]ownshipToOwnship_gain[style:knob]
 ownshipToOwnshipSub_gain = hslider("h:[0]gains/[3]ownshipToOwnshipSub_gain[style:knob]",1,0,1,0.01);
 sourcesToOutside_gain = hslider("h:[0]gains/[4]sourcesToOutside_gain[style:knob]",1,0,1,0.01);
 sourcesToOwnship_gain = hslider("h:[0]gains/[5]sourcesToOwnship_gain[style:knob]",0.8,0,1,0.01);
-sounscape_gain = hslider("h:[0]gains/[5]soundscape_gain[style:knob]",0.02,0,1,0.01);
+
+countrySoundscape_gain = hslider("h:[4]SS/[0]countrySS_gain[style:knob]",0.02,0,1,0.01);
+citySoundscape_gain = hslider("h:[4]SS/[1]citySS_gain[style:knob]",0.02,0,1,0.01);
+carParkSoundscape_gain = hslider("h:[4]SS/[2]carPSS_gain[style:knob]",0.02,0,1,0.01);
 
 //#######################
 // DSP
@@ -93,7 +102,14 @@ spatSound(0) = helicopter_0 , %(SR*5) ~+(1) : rdtable : sourceSpatInst(0);
 spatSound(1) = ambulance_0 , %(16944) ~+(1) : rdtable : sourceSpatInst(1);
 
 // countryside soundscape
-countryScape = (countrysideL_0, %(295877) ~+(1) : rdtable*sounscape_gain), (countrysideR_0, %(295877) ~+(1) : rdtable*sounscape_gain) : stereoToSoundScape;
+countryScape = (countrysideL_0, %(295877) ~+(1) : rdtable*countrySoundscape_gain), (countrysideR_0, %(295877) ~+(1) : rdtable*countrySoundscape_gain) : stereoToSoundScape;
+
+// city soundscape
+cityScape = (CitySkylineL_0, %(295877) ~+(1) : rdtable*citySoundscape_gain), (CitySkylineR_0, %(295877) ~+(1) : rdtable*citySoundscape_gain) : stereoToSoundScape;
+
+// car park soundscape
+carParkScape = (carParkL_0, %(295877) ~+(1) : rdtable*carParkSoundscape_gain), (carParkR_0, %(295877) ~+(1) : rdtable*carParkSoundscape_gain) : stereoToSoundScape;
+
 
 // bicycle
 bicycle = bicycleBell_0 , ((min(35350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
@@ -152,6 +168,8 @@ audioEngine = vgroup("audioEngine",
 	childtalk,
 	pipeclank,
 	countryScape,
+	cityScape,
+	carParkScape,
 	ownshipSounds  
 	:>
 	outputPatch
