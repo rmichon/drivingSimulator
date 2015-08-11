@@ -39,7 +39,7 @@ ownshipToOwnship_gain = hslider("h:[0]gains/[2]ownshipToOwnship_gain[style:knob]
 ownshipToOwnshipSub_gain = hslider("h:[0]gains/[3]ownshipToOwnshipSub_gain[style:knob]",1,0,1,0.01);
 sourcesToOutside_gain = hslider("h:[0]gains/[4]sourcesToOutside_gain[style:knob]",1,0,1,0.01);
 sourcesToOwnship_gain = hslider("h:[0]gains/[5]sourcesToOwnship_gain[style:knob]",0.8,0,1,0.01);
-sounscape_gain = hslider("h:[0]gains/[5]soundscape_gain[style:knob]",0.02,0,1,0.01);
+sounscape_gain = hslider("h:[0]gains/[5]soundscape_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 
 //#######################
 // DSP

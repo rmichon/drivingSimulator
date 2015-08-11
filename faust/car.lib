@@ -80,8 +80,8 @@ sourceSpatXY(X,Y) =
 	*(elevation/1.5) : // top speaker
 	outputPatch // routing
 	with{
-		x = X : min(1) : max(0); // just to be sure...
-		y = Y : min(1) : max(0);
+		x = X : min(1) : max(-1); // just to be sure...
+		y = Y : min(1) : max(-1);
 		
 		nSpeakersR1 = 4; // shouldn't be changed...
 		nSpeakersR2 = 4;
@@ -142,9 +142,9 @@ sourceSpatXYZ(X,Y,Z) =
 	*(elevation/1.5) : // top speaker
 	outputPatch // routing
 	with{
-		x = X : min(1) : max(0); // just to be sure...
-		y = Y : min(1) : max(0);
-		z = Z : min(1) : max(0);
+		x = X : min(1) : max(-1); // just to be sure...
+		y = Y : min(1) : max(-1);
+		z = Z : min(1) : max(-1);
 		
 		nSpeakersR1 = 4; // shouldn't be changed...
 		nSpeakersR2 = 4;
