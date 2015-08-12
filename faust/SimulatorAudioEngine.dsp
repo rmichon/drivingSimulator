@@ -46,9 +46,9 @@ ownshipToOwnshipSub_gain = hslider("h:[0]gains/[3]ownshipToOwnshipSub_gain[style
 sourcesToOutside_gain = hslider("h:[0]gains/[4]sourcesToOutside_gain[style:knob]",1,0,1,0.01);
 sourcesToOwnship_gain = hslider("h:[0]gains/[5]sourcesToOwnship_gain[style:knob]",0.8,0,1,0.01);
 
-countrySoundscape_gain = hslider("h:[4]SS/[0]countrySS_gain[style:knob]",0.02,0,1,0.01);
-citySoundscape_gain = hslider("h:[4]SS/[1]citySS_gain[style:knob]",0.02,0,1,0.01);
-carParkSoundscape_gain = hslider("h:[4]SS/[2]carPSS_gain[style:knob]",0.02,0,1,0.01);
+countrySoundscape_gain = hslider("h:[4]SS/[0]countrySS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
+citySoundscape_gain = hslider("h:[4]SS/[1]citySS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
+carParkSoundscape_gain = hslider("h:[4]SS/[2]carPSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 
 //#######################
 // DSP
