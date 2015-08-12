@@ -103,18 +103,24 @@ movCar(i) = movingCar(distance) : sourceSpatXY(x,y) :
 };
 
 // different spatialized sound sources
-spatSound(0) = helicopter_0 , %(SR*5) ~+(1) : rdtable*helicopter_gain : sourceSpatInst(0);
-spatSound(1) = ambulance_0 , %(16944) ~+(1) : rdtable*emergency_gain : sourceSpatInst(1);
+spatSound(0) = helicopter_0 , (%(SR*5) ~+(1) : int) : rdtable*helicopter_gain : sourceSpatInst(0);
 
 // countryside soundscape
-countryScape = (countrysideL_0, %(295877) ~+(1) : rdtable*0.05*countrySoundscape_gain), (countrysideR_0, %(295877) ~+(1) : rdtable*0.05*countrySoundscape_gain) : stereoToSoundScape;
+countryScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain), (countrysideR_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain) : stereoToSoundScape;
 
 // city soundscape
-cityScape = (CitySkylineL_0, %(992412) ~+(1) : rdtable*0.4*citySoundscape_gain), (CitySkylineR_1, %(192412) ~+(1) : rdtable*0.4*citySoundscape_gain) : stereoToSoundScape;
+cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.4*citySoundscape_gain), (CitySkylineR_1, (%(192412) ~+(1) : int) : rdtable*0.4*citySoundscape_gain) : stereoToSoundScape;
 
 // car park soundscape
-carParkScape = (carParkL_0, %(1166124) ~+(1) : rdtable*0.5*carParkSoundscape_gain), (carParkR_1, %(1166124) ~+(1) : rdtable*0.5*carParkSoundscape_gain) : stereoToSoundScape;
+carParkScape = (carParkL_0, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain), (carParkR_1, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain) : stereoToSoundScape;
 
+// ambulance
+ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain : sourceSpatXY(x,y) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{	 
+		x = hslider("h:ambulance/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:ambulance/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+};
 
 // bicycle
 bicycle = bicycleBell_0 , ((min(35350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
@@ -187,8 +193,9 @@ carSub) =
 // putting things together
 audioEngine = vgroup("audioEngine",
 	simulatorBridge,
-	par(i,2,spatSound(i)),
+	par(i,1,spatSound(i)),
 	par(i,10,movCar(i)),
+	ambul,
 	bicycle,
 	dogwoof,
 	childtalk,
