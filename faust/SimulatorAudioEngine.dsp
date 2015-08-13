@@ -73,12 +73,25 @@ simulatorBridge(frontLeft,frontRight,rearLeft,rearRight,frontCenter,carSub) =
 	rearRight*simulator_bridge_gain, 
 	carSub;
 
+reverb = _,_ <: (*(g)*fixedgain,*(g)*fixedgain : stereo_freeverb(combfeed, allpassfeed, damping, spatSpread)), *(1-g), *(1-g) :> _,_ with{
+	scaleroom   = 0.28;
+	offsetroom  = 0.7;
+	allpassfeed = 0.5;
+	scaledamp   = 0.4;
+	fixedgain   = 0.1;
+	origSR = 44100;
+	damping = hslider("h:reverb/Damp[style: knob]",0.5, 0, 1, 0.025)*scaledamp*origSR/SR;
+	combfeed = hslider("h:reverb/RoomSize[style: knob]", 0.5, 0, 1, 0.025)*scaleroom*origSR/SR + offsetroom;
+	spatSpread = hslider("h:reverb/stereoSpread[style: knob]",0.5,0,1,0.01)*46*SR/origSR : int;
+	g = hslider("h:reverb/Wet[style: knob]", 0.3333, 0, 1, 0.025) : smooth(0.999);
+};
+
 // driver's car sounds
 ownshipSounds =
 		// car engine
 		carEngine(engine_RPM,engine_randomness,engine_turbulances,engine_compression,engine_brightness)*engine_gain
 		<: 
-		par(i,4,*(ownshipToOutside_gain)), 
+		(reverb <: par(i,4,*(ownshipToOutside_gain))), 
 		par(i,6,0), 
 		(roadNoise(speed)*roadNoise_gain*2 + _ <: // road noise only going to ownship
 			(par(i,4,*(ownshipToOwnship_gain)), *(ownshipToOwnshipSub_gain)))
