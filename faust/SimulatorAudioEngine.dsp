@@ -53,7 +53,7 @@ citySoundscape_gain = hslider("h:[4]SS/[1]citySS_gain[style:knob]",0.02,0,1,0.01
 carParkSoundscape_gain = hslider("h:[4]SS/[2]carPSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 
 helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",0.02,0,1,0.01);
-emergency_gain = hslider("h:[5]SoundSources/[1]emergency_gain[style:knob]",0.02,0,1,0.01);
+emergency_gain = hslider("h:[5]SoundSources/[1]emergency_gain[style:knob]",1.0,0,1,0.01);
 
 //#######################
 // DSP
@@ -116,11 +116,12 @@ cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.4*citySoundscap
 carParkScape = (carParkL_0, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain), (carParkR_1, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain) : stereoToSoundScape;
 
 // ambulance
-ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain : sourceSpatXY(x,y) : 
+ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*on : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{	 
-		x = hslider("h:ambulance/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:ambulance/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:ambul/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:ambul/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		on = button("h:ambul/on");
 };
 
 // bicycle
@@ -212,9 +213,3 @@ audioEngine = vgroup("audioEngine",
 );
 
 process = audioEngine;
-
-
-
-
-
-
