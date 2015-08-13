@@ -94,9 +94,10 @@ sourceSpatInst(i) = sourceSpatXYZ(x,y,z) :
 };
 
 // special case of the source spatilizer for a moving car
-movCar(i) = movingCar(distance) : sourceSpatXY(x,y) : 
+movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
+		v = hslider("h:car%i/v[style:knob]",0,0,60,0.01)/53.0 : smooth(0.999); // cc added velocity range 0 - 53m/s
 		x = hslider("h:car%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		y = hslider("h:car%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		distance = 1-(sqrt(2) - sqrt(pow(x,2)+pow(y,2)))/sqrt(2);
