@@ -30,6 +30,7 @@ import("cuckooBeeps.dsp");
 import("RoadDrilling.dsp");
 import("garbagetruck.dsp");
 import("cows.dsp");
+import("hammer.dsp");
 
 //#######################
 // PARAMETERS
@@ -104,8 +105,9 @@ ownshipSounds =
 
 // abstraction of the source spatializer with "i" the iteration number
 sourceSpatInst(i) = sourceSpatXYZ(x,y,z) : 
-	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
-	with{		 
+	par(i,10,*(sourcesToOutside_gain*on)), par(i,4,*(sourcesToOwnship_gain*on)), 0
+	with{		
+		on = button("h:source%i/on");
 		x = hslider("h:source%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		y = hslider("h:source%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		z = hslider("h:source%i/z[style:knob]",30,0,30,0.01)/30 : smooth(0.999);
@@ -217,7 +219,7 @@ roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : s
 };
 
 // building construction noise
-bldgconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+bldgconstruction = hammer_0 , ((min(808154)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:bldc/on");	
