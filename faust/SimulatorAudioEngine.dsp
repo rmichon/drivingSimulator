@@ -147,6 +147,15 @@ ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*on : sourc
 		on = button("h:ambul/on");
 };
 
+// plane
+plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable : sourceSpatXYZ(x,y,z) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{ 
+		x = hslider("h:plane/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:plane/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		z = hslider("h:plane/z[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+};
+
 // train
 trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.6), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.6) : stereoToSoundScape 
 	with{	 
