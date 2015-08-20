@@ -1,4 +1,4 @@
 #!/bin/bash
-
+rm ~/.SimulatorAudioEnginerc &
 ./udp2osc/udp2osc &
 ./faust/SimulatorAudioEngine.app/Contents/MacOS/SimulatorAudioEngine &

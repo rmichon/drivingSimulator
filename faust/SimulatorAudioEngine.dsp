@@ -36,7 +36,7 @@ import("hammer.dsp");
 // PARAMETERS
 //#######################
 
-engine_RPM = hslider("[2]VehRPM",1000,500,9000,0.01)+300 : smooth(0.999);
+engine_RPM = hslider("[2]VehRPM",500,500,9000,0.01)+300 : smooth(0.999);
 speed = hslider("[3]VehSpeedMPH",0,0,100,0.01) : smooth(0.999);
 engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.5,0,1,0.01); 
 engine_turbulances = hslider("h:[1]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
@@ -58,7 +58,7 @@ citySoundscape_gain = hslider("h:[4]SS/[1]citySS_gain[style:knob]",0.02,0,1,0.01
 carParkSoundscape_gain = hslider("h:[4]SS/[2]carPSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 //farmSoundscape_gain = hslider("h:[4]SS/[3]farmSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 
-helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",0.02,0,1,0.01);
+helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",1.0,0,1,0.01);
 emergency_gain = hslider("h:[5]SoundSources/[1]emergency_gain[style:knob]",1.0,0,1,0.01);
 
 //#######################
@@ -86,10 +86,10 @@ reverb = _,_ <: (*(g)*fixedgain,*(g)*fixedgain : stereo_freeverb(combfeed, allpa
 	scaledamp   = 0.4;
 	fixedgain   = 0.1;
 	origSR = 44100;
-	damping = hslider("h:reverb/Damp[style: knob]",0.5, 0, 1, 0.025)*scaledamp*origSR/SR;
-	combfeed = hslider("h:reverb/RoomSize[style: knob]", 0.5, 0, 1, 0.025)*scaleroom*origSR/SR + offsetroom;
+	damping = hslider("h:reverb/Damp[style: knob]",0.7, 0, 1, 0.025)*scaledamp*origSR/SR;
+	combfeed = hslider("h:reverb/RoomSize[style: knob]", 0.7, 0, 1, 0.025)*scaleroom*origSR/SR + offsetroom;
 	spatSpread = hslider("h:reverb/stereoSpread[style: knob]",0.5,0,1,0.01)*46*SR/origSR : int;
-	g = hslider("h:reverb/Wet[style: knob]", 0.3333, 0, 1, 0.025) : smooth(0.999);
+	g = hslider("h:reverb/Wet[style: knob]", 0.0, 0, 1, 0.025) : smooth(0.999);
 };
 
 // driver's car sounds
@@ -117,7 +117,7 @@ sourceSpatInst(i) = sourceSpatXYZ(x,y,z) :
 movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
-		v = hslider("h:car%i/v[style:knob]",0,0,60,0.01)/53.0 : smooth(0.999); // cc added velocity range 0 - 53m/s
+		v = hslider("h:car%i/v[style:knob]",0,0,60,0.01)/40.0+0.1 : smooth(0.999); // cc added velocity range 0 - 53m/s
 		x = hslider("h:car%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		y = hslider("h:car%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		distance = 1-(sqrt(2) - sqrt(pow(x,2)+pow(y,2)))/sqrt(2);
@@ -133,7 +133,7 @@ countryScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySo
 //farmScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*farmSoundscape_gain), (countrysideR_0, (%(295877) ~+(1) : int) : rdtable*0.05*farmSoundscape_gain) : stereoToSoundScape;
 
 // city soundscape
-cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.4*citySoundscape_gain), (CitySkylineR_1, (%(192412) ~+(1) : int) : rdtable*0.4*citySoundscape_gain) : stereoToSoundScape;
+cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.6*citySoundscape_gain), (CitySkylineR_1, (%(192412) ~+(1) : int) : rdtable*0.6*citySoundscape_gain) : stereoToSoundScape;
 
 // car park soundscape
 carParkScape = (carParkL_0, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain), (carParkR_1, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain) : stereoToSoundScape;
@@ -148,7 +148,7 @@ ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*on : sourc
 };
 
 // train
-trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable) : stereoToSoundScape 
+trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.6), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.6) : stereoToSoundScape 
 	with{	 
 		on = button("h:train/on");
 };
@@ -201,7 +201,7 @@ gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable : sourceSpatX
 };
 
 // beeping for pedestrian crossing
-crosswalkbeep = cuckooBeeps_0 , ((min(1277768)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.5 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:crossw/on");	
@@ -219,7 +219,7 @@ roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : s
 };
 
 // building construction noise
-bldgconstruction = hammer_0 , ((min(808154)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+bldgconstruction = hammer_0 , ((min(808154)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:bldc/on");	
