@@ -148,9 +148,10 @@ ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*on : sourc
 };
 
 // plane
-plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable : sourceSpatXYZ(x,y,z) : 
+plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y,z) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{ 
+		on = button("h:plane/on");
 		x = hslider("h:plane/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		y = hslider("h:plane/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		z = hslider("h:plane/z[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
@@ -228,7 +229,7 @@ roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : s
 };
 
 // building construction noise
-bldgconstruction = hammer_0 , ((min(808154)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) : 
+bldgconstruction = hammer_0 , ((min(395097)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:bldc/on");	
