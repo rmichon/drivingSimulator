@@ -211,7 +211,7 @@ gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable : sourceSpatX
 };
 
 // beeping for pedestrian crossing
-crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.5 : sourceSpatXY(x,y) : 
+crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.20 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:crossw/on");	
