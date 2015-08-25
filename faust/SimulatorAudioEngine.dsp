@@ -58,7 +58,7 @@ citySoundscape_gain = hslider("h:[4]SS/[1]citySS_gain[style:knob]",0.02,0,1,0.01
 carParkSoundscape_gain = hslider("h:[4]SS/[2]carPSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 //farmSoundscape_gain = hslider("h:[4]SS/[3]farmSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 
-helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",1.0,0,1,0.01);
+helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",0.6,0,1,0.01);
 emergency_gain = hslider("h:[5]SoundSources/[1]emergency_gain[style:knob]",1.0,0,1,0.01);
 
 //#######################
@@ -158,7 +158,7 @@ plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y
 };
 
 // train
-trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.6), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.6) : stereoToSoundScape 
+trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.2), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.2) : stereoToSoundScape 
 	with{	 
 		on = button("h:train/on");
 };
@@ -173,7 +173,7 @@ bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable : sourceSpatXY
 };
 
 // dogbark
-dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.5 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:dogbark/on");	 
@@ -182,7 +182,7 @@ dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y
 };
 
 // child
-childtalk = child_0 , ((min(110350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+childtalk = child_0 , ((min(84471)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:child/on");	 
@@ -229,7 +229,7 @@ roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : s
 };
 
 // building construction noise
-bldgconstruction = hammer_0 , ((min(395097)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) : 
+bldgconstruction = hammer_0 , ((min(585747)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:bldc/on");	
