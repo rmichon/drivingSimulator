@@ -133,7 +133,7 @@ countryScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySo
 //farmScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*farmSoundscape_gain), (countrysideR_0, (%(295877) ~+(1) : int) : rdtable*0.05*farmSoundscape_gain) : stereoToSoundScape;
 
 // city soundscape
-cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.6*citySoundscape_gain), (CitySkylineR_1, (%(192412) ~+(1) : int) : rdtable*0.6*citySoundscape_gain) : stereoToSoundScape;
+cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.35*citySoundscape_gain), (CitySkylineR_1, (%(192412) ~+(1) : int) : rdtable*0.6*citySoundscape_gain) : stereoToSoundScape;
 
 // car park soundscape
 carParkScape = (carParkL_0, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain), (carParkR_1, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain) : stereoToSoundScape;
