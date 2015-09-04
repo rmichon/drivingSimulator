@@ -38,11 +38,11 @@ import("hammer.dsp");
 
 engine_RPM = hslider("[2]VehRPM",500,500,9000,0.01)+300 : smooth(0.999);
 speed = hslider("[3]VehSpeedMPH",0,0,100,0.01) : smooth(0.999);
-engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.5,0,1,0.01); 
+engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.25,0,1,0.01); 
 engine_turbulances = hslider("h:[1]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
 engine_compression = hslider("h:[1]ownship/[2]engine_compression[style:knob]",0.6,0,1,0.01);
-engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",150,50,5000,1);
-ownship_freq = hslider("h:[1]ownship/[4]cutoffFreq[style:knob]",300,50,3000,0.1);
+engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",200,50,5000,1);
+ownship_freq = hslider("h:[1]ownship/[4]cutoffFreq[style:knob]",700,50,3000,0.1);
 engine_gain = hslider("h:[1]ownship/[5]engine_gain[style:knob]",1,0,1,0.01);
 roadNoise_gain = hslider("h:[1]ownship/[6]roadNoise_gain[style:knob]",1,0,1,0.01);
 
@@ -58,7 +58,7 @@ citySoundscape_gain = hslider("h:[4]SS/[1]citySS_gain[style:knob]",0.02,0,1,0.01
 carParkSoundscape_gain = hslider("h:[4]SS/[2]carPSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 //farmSoundscape_gain = hslider("h:[4]SS/[3]farmSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 
-helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",0.6,0,1,0.01);
+helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",1.0,0,1,0.01);
 emergency_gain = hslider("h:[5]SoundSources/[1]emergency_gain[style:knob]",1.0,0,1,0.01);
 
 //#######################
@@ -117,14 +117,14 @@ sourceSpatInst(i) = sourceSpatXYZ(x,y,z) :
 movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
-		v = hslider("h:car%i/v[style:knob]",0,0,60,0.01)/40.0+0.1 : smooth(0.999); // cc added velocity range 0 - 53m/s
-		x = hslider("h:car%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:car%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		v = hslider("h:car%i/v[style:knob]",0,0,60,0.01)/50.0+0.02 : smooth(0.999); // cc added velocity range 0 - 50m/s
+		x = hslider("h:car%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.99995);
+		y = hslider("h:car%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.99995);
 		distance = 1-(sqrt(2) - sqrt(pow(x,2)+pow(y,2)))/sqrt(2);
 };
 
 // different spatialized sound sources
-spatSound(0) = helicopter_0 , (%(SR*5) ~+(1) : int) : rdtable*helicopter_gain : sourceSpatInst(0);
+spatSound(0) = helicopter_0 , (%(SR*5) ~+(1) : int) : rdtable*helicopter_gain*1.1 : sourceSpatInst(0);
 
 // countryside soundscape
 countryScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain), (countrysideR_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain) : stereoToSoundScape;
@@ -164,7 +164,7 @@ trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.2), (trainR_0, (
 };
 
 // bicycle
-bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable*0.7 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:bicycle/on");	 
@@ -173,7 +173,7 @@ bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable : sourceSpatXY
 };
 
 // dogbark
-dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.5 : sourceSpatXY(x,y) : 
+dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:dogbark/on");	 
@@ -182,7 +182,7 @@ dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.5 : sourceSpatXY
 };
 
 // child
-childtalk = child_0 , ((min(84471)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.5 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:child/on");	 

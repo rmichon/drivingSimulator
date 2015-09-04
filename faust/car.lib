@@ -74,7 +74,7 @@ ownshipSubFilter(freq) = lowpass(4,freq);
 // 		x: normalized x distance from source (0-1)
 //		y: normalized y distance from source (0-1)
 sourceSpatXY(X,Y) = 
-	doppler(distance)*distance <: 
+	doppler(distance)*distance2*1.4 <: 
 	(*(1-min(1,elevation)) : oneRing(nSpeakersR1, angle, spread)), // ground ring
 	(*(elevation*(elevation <= 1) + (1-(elevation-1))*(elevation > 1)) : oneRing(nSpeakersR2, angle, spread)), // upper ring
 	*(elevation/1.5) : // top speaker
@@ -103,6 +103,7 @@ sourceSpatXY(X,Y) =
 
 		// distance is only based on x and y, but z could be added if necessary...
 		distance = (sqrt(2)-sqrt(pow(x,2) + pow(y,2)))/sqrt(2);
+		distance2 = max(0,(1-sqrt(pow(x,2) + pow(y,2))));
 
 		// simple doppler effect (feedforward filter)
 		doppler(pos) = _ <: _+fdelay2(64,L) : *(0.5)
@@ -136,7 +137,7 @@ sourceSpatXY(X,Y) =
 //		y: normalized y distance from source (0-1)
 //		z: normalized z distance from source (0-1)
 sourceSpatXYZ(X,Y,Z) = 
-	doppler(distance)*distance <: 
+	doppler(distance)*distance2 <: 
 	(*(1-min(1,elevation)) : oneRing(nSpeakersR1, angle, spread)), // ground ring
 	(*(elevation*(elevation <= 1) + (1-(elevation-1))*(elevation > 1)) : oneRing(nSpeakersR2, angle, spread)), // upper ring
 	*(elevation/1.5) : // top speaker
@@ -166,6 +167,7 @@ sourceSpatXYZ(X,Y,Z) =
 
 		// distance is only based on x and y, but z could be added if necessary...
 		distance = (sqrt(3)-sqrt(pow(x,2) + pow(y,2) + pow(z,2)))/sqrt(3);
+		distance2 = max(0,(1-sqrt(pow(x,2) + pow(y,2) + pow(z,2))));
 
 		// simple doppler effect (feedforward filter)
 		doppler(pos) = _ <: _+fdelay2(64,L) : *(0.5)
