@@ -118,13 +118,13 @@ movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
 		v = hslider("h:car%i/v[style:knob]",0,0,60,0.01)/50.0+0.02 : smooth(0.999); // cc added velocity range 0 - 50m/s
-		x = hslider("h:car%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.99995);
-		y = hslider("h:car%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.99995);
+		x = hslider("h:car%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		y = hslider("h:car%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
 		distance = 1-(sqrt(2) - sqrt(pow(x,2)+pow(y,2)))/sqrt(2);
 };
 
 // different spatialized sound sources
-spatSound(0) = helicopter_0 , (%(SR*5) ~+(1) : int) : rdtable*helicopter_gain*1.1 : sourceSpatInst(0);
+spatSound(0) = helicopter_0 , (%(SR*5) ~+(1) : int) : rdtable*helicopter_gain*0.9: sourceSpatInst(0);
 
 // countryside soundscape
 countryScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain), (countrysideR_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain) : stereoToSoundScape;
@@ -182,7 +182,7 @@ dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatX
 };
 
 // child
-childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.5 : sourceSpatXY(x,y) : 
+childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.4 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:child/on");	 
