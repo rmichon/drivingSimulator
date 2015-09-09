@@ -182,7 +182,7 @@ dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatX
 };
 
 // child
-childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.4 : sourceSpatXY(x,y) : 
+childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.6 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:child/on");	 
