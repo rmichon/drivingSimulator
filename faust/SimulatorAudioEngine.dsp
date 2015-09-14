@@ -42,7 +42,7 @@ engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.25
 engine_turbulances = hslider("h:[1]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
 engine_compression = hslider("h:[1]ownship/[2]engine_compression[style:knob]",0.6,0,1,0.01);
 engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",200,50,5000,1);
-ownship_freq = hslider("h:[1]ownship/[4]cutoffFreq[style:knob]",700,50,3000,0.1);
+ownship_freq = hslider("h:[1]ownship/[4]cutoffFreq[style:knob]",500,50,3000,0.1);
 engine_gain = hslider("h:[1]ownship/[5]engine_gain[style:knob]",1,0,1,0.01);
 roadNoise_gain = hslider("h:[1]ownship/[6]roadNoise_gain[style:knob]",1,0,1,0.01);
 
@@ -92,6 +92,19 @@ reverb = _,_ <: (*(g)*fixedgain,*(g)*fixedgain : stereo_freeverb(combfeed, allpa
 	g = hslider("h:reverb/Wet[style: knob]", 0.0, 0, 1, 0.025) : smooth(0.999);
 };
 
+ambReverb = _,_ <: (*(g)*fixedgain,*(g)*fixedgain : stereo_freeverb(combfeed, allpassfeed, damping, spatSpread)), *(1-g), *(1-g) :> _,_ with{
+	scaleroom   = 0.28;
+	offsetroom  = 0.7;
+	allpassfeed = 0.5;
+	scaledamp   = 0.4;
+	fixedgain   = 0.1;
+	origSR = 44100;
+	damping = 0.3*scaledamp*origSR/SR;
+	combfeed = 0.8*scaleroom*origSR/SR + offsetroom;
+	spatSpread = 0.5*46*SR/origSR : int;
+	g = 0.2;
+};
+
 // driver's car sounds
 ownshipSounds =
 		// car engine
@@ -108,9 +121,9 @@ sourceSpatInst(i) = sourceSpatXYZ(x,y,z) :
 	par(i,10,*(sourcesToOutside_gain*on)), par(i,4,*(sourcesToOwnship_gain*on)), 0
 	with{		
 		on = button("h:source%i/on");
-		x = hslider("h:source%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:source%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		z = hslider("h:source%i/z[style:knob]",30,0,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:source%i/x[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
+		y = hslider("h:source%i/y[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
+		z = hslider("h:source%i/z[style:knob]",150,0,150,0.01)/150 : smooth(0.999);
 };
 
 // special case of the source spatilizer for a moving car
@@ -118,8 +131,8 @@ movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
 		v = hslider("h:car%i/v[style:knob]",0,0,60,0.01)/50.0+0.02 : smooth(0.999); // cc added velocity range 0 - 50m/s
-		x = hslider("h:car%i/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:car%i/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:car%i/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:car%i/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		distance = 1-(sqrt(2) - sqrt(pow(x,2)+pow(y,2)))/sqrt(2);
 };
 
@@ -139,11 +152,11 @@ cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.35*citySoundsca
 carParkScape = (carParkL_0, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain), (carParkR_1, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain) : stereoToSoundScape;
 
 // ambulance
-ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*on : sourceSpatXY(x,y) : 
+ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*0.5*on <: ambReverb :> sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{	 
-		x = hslider("h:ambul/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:ambul/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:ambul/x[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
+		y = hslider("h:ambul/y[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
 		on = button("h:ambul/on");
 };
 
@@ -152,13 +165,13 @@ plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{ 
 		on = button("h:plane/on");
-		x = hslider("h:plane/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:plane/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		z = hslider("h:plane/z[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:plane/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:plane/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		z = hslider("h:plane/z[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // train
-trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.2), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.2) : stereoToSoundScape 
+trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4) : stereoToSoundScape 
 	with{	 
 		on = button("h:train/on");
 };
@@ -168,8 +181,8 @@ bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable*0.7 : sourceSp
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:bicycle/on");	 
-		x = hslider("h:bicycle/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:bicycle/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:bicycle/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:bicycle/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // dogbark
@@ -177,8 +190,8 @@ dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatX
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:dogbark/on");	 
-		x = hslider("h:dogbark/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:dogbark/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:dogbark/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:dogbark/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // child
@@ -186,8 +199,8 @@ childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.6 : sourceSpatXY
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:child/on");	 
-		x = hslider("h:child/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:child/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:child/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:child/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // clank
@@ -196,18 +209,18 @@ pipeclank = clank_0 , ((min(37350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y
 	with{
 		on = button("h:clank/on");	
 		//gain = button("h:clank/gain"); 
-		x = hslider("h:clank/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:clank/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:clank/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:clank/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // garbage truck
-gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable*0.3 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:gtruck/on");	
 		//gain = button("h:clank/gain"); 
-		x = hslider("h:gtruck/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:gtruck/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:gtruck/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:gtruck/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // beeping for pedestrian crossing
@@ -215,8 +228,8 @@ crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.20 : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:crossw/on");	
-		x = hslider("h:crossw/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:crossw/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:crossw/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:crossw/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // road construction noise
@@ -224,8 +237,8 @@ roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : s
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:roadc/on");	
-		x = hslider("h:roadc/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:roadc/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:roadc/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:roadc/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // building construction noise
@@ -233,8 +246,8 @@ bldgconstruction = hammer_0 , ((min(585747)*on) ~+(1) : int) : rdtable*1.5 : sou
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:bldc/on");	
-		x = hslider("h:bldc/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:bldc/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:bldc/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:bldc/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // farm cattle noise
@@ -242,8 +255,8 @@ cattlesounds = cows_0 , ((min(1256849)*on) ~+(1) : int) : rdtable : sourceSpatXY
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:farm/on");	
-		x = hslider("h:farm/x[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
-		y = hslider("h:farm/y[style:knob]",30,-30,30,0.01)/30 : smooth(0.999);
+		x = hslider("h:farm/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:farm/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 
@@ -283,3 +296,5 @@ audioEngine = vgroup("audioEngine",
 );
 
 process = audioEngine;
+
+//process = ambul;
