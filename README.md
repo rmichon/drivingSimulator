@@ -15,3 +15,13 @@ This repository contains the different softwares developed in the Frame of the R
 - ./faust: the faust codes
 
 - ./udp2osc: a very simple program that retrieves the UDP messages from the car simulator, format them into OSC messages and send them on a defined port.
+
+
+
+debug commands:
+
+	oscsend localhost 5510 /audioEngine/child/on f 1.0
+
+	nc -luv 8089
+
+	oscdump 5510

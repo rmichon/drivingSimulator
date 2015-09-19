@@ -1,0 +1,7 @@
+
+
+- the child sound would not play when the child/x and child/y are varying. When I make the position static, it works, but when it starts moving, it gets cut off, even though the values of x and y are small. Got fixed when i started sending a static position from the simulator for the child.
+I believe this might be affecting other moving sounds too - some things like the emergency vehicle seem to be occasionally abnormal
+
+
+- the clicking with the engine rpm sounds that Sile and I identified last month,that Romain was unable to replicate on his computer while on vacation, that we ended up fiing by power cycling the mixer - reappeared, but did not go away after two power cyclings this time

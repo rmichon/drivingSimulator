@@ -185,6 +185,7 @@ bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable*0.7 : sourceSp
 		y = hslider("h:bicycle/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
+
 // dogbark
 dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
