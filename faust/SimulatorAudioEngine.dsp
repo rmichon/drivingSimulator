@@ -265,7 +265,7 @@ cattlesounds = cows_0 , ((min(1256849)*on) ~+(1) : int) : rdtable : sourceSpatXY
 
 
 // pedestrian walking and talking
-pedwalk = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+pedwalk_s = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:pedwalk/on");	
@@ -274,7 +274,7 @@ pedwalk = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,
 };
 
 // police car sound
-woobwoob = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
 		on = button("h:woobwoob/on");	
@@ -312,8 +312,8 @@ audioEngine = vgroup("audioEngine",
 	countryScape,
 	cityScape,
 	carParkScape,
-	pedwalk,
-	woobwoob,
+	pedwalk_s,
+	woobwoob_s,
 	ownshipSounds  
 	:>
 	outputPatch
