@@ -32,6 +32,9 @@ import("garbagetruck.dsp");
 import("cows.dsp");
 import("hammer.dsp");
 
+import("pedwalk.dsp");
+import("police.dsp");
+
 //#######################
 // PARAMETERS
 //#######################
@@ -261,8 +264,26 @@ cattlesounds = cows_0 , ((min(1256849)*on) ~+(1) : int) : rdtable : sourceSpatXY
 };
 
 
+// pedestrian walking and talking
+pedwalk = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{
+		on = button("h:pedwalk/on");	
+		x = hslider("h:pedwalk/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:pedwalk/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+};
+
+// police car sound
+woobwoob = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
+	with{
+		on = button("h:woobwoob/on");	
+		x = hslider("h:woobwoob/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:woobwoob/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+};
+
 // car speakers output
-ownshipOut = par(i,4,ownshipFilter(ownship_freq)),ownshipSubFilter(90);
+ownshipOut = par(i,4,ownshipFilter	(ownship_freq)),ownshipSubFilter(90);
 
 // routing the signals to the right channels
 outputPatch(lowFrontLeft,lowFrontRight,lowRearLeft,lowRearRight,lowFrontCenter,highFrontLeft,highFrontRight,highRearLeft,highRearRight,highCenter,ownshipFrontLeft,ownshipFrontRight,ownshipRearLeft,ownshipRearRight,
@@ -291,6 +312,8 @@ audioEngine = vgroup("audioEngine",
 	countryScape,
 	cityScape,
 	carParkScape,
+	pedwalk,
+	woobwoob,
 	ownshipSounds  
 	:>
 	outputPatch
