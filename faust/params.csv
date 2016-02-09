@@ -1,0 +1,58 @@
+Event,EventName,Params
+Bicycle Bell,b,o
+,b,x
+,b,y
+Dog Bark,d,o
+,d,x
+,d,y
+Child Talking,c,o
+,c,x
+,c,y
+Ambulance,a,o
+,a,x
+,a,y
+Plane,pl,o
+,pl,x
+,pl,y
+,pl,z
+Train,t,o
+Clank,cl,o
+,cl,x
+,cl,y
+Garbage Truck,g,o
+,g,x
+,g,y
+Crosswalk Beep,cr,o
+,cr,x
+,cr,y
+Road Construction,r,o
+,r,x
+,r,y
+Building Construction ,bc,o
+,bc,x
+,bc,y
+Cattle Sounds (Farm),f,o
+,f,x
+,f,y
+Pedestrian Walking,p,o
+,p,x
+,p,y
+WoobWoob (Police Car),w,o
+,w,x
+,w,y
+Soundscape Countryside (gain),S,co
+Soundscape City (gain),S,ci
+Soundscape carPark (gain),S,ca
+Reverb (Wet),rev,W
+,,
+Vehicle Speed (MPH),VS,
+Engine RPM,VR,
+,,
+car i,ci,x
+,,y
+,,v
+,,
+Helicopter,s0,x
+,,y
+,,z
+,(on),o
