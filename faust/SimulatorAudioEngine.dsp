@@ -133,9 +133,9 @@ sourceSpatInst(i) = sourceSpatXYZ(x,y,z) :
 movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{		 
-		v = hslider("h:c%i/v[style:knob]",0,0,60,0.01)/50.0+0.02 : smooth(0.999); // cc added velocity range 0 - 50m/s
-		x = hslider("h:c%i/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:c%i/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		v = hslider("h:c%i/v[style:knob]",0,0,60,0.01)/50.0+0.02;// : smooth(0.999); // cc added velocity range 0 - 50m/s
+		x = hslider("h:c%i/x[style:knob]",50,-50,50,0.01)/50;// : smooth(0.999);
+		y = hslider("h:c%i/y[style:knob]",50,-50,50,0.01)/50;// : smooth(0.999);
 		distance = 1-(sqrt(2) - sqrt(pow(x,2)+pow(y,2)))/sqrt(2);
 };
 
