@@ -70,18 +70,18 @@ int main(int argc, char* argv[])
 			std::string inMessage( buf, buf + sizeof buf / sizeof buf[0] ); // converting the input buffer to a string
 			
 			// counting the number of semicolons to detect the number of messages in the packet
-			int nParams = std::count(inMessage.begin(), inMessage.end(), ';')-2;
+			int nParams = std::count(inMessage.begin(), inMessage.end(), '\n')-2;
 
 			for(int i=0; i<nParams; i++){
 				std::string oscAddress = OSC_BASE_ADDRESS;
 				oscAddress.append(inMessage.substr(0,inMessage.find(":")));
-				std::string oscValueString = inMessage.substr(inMessage.find(":")+1,inMessage.find(";")-inMessage.find(":")-1);
+				std::string oscValueString = inMessage.substr(inMessage.find(":")+1,inMessage.find("\n")-inMessage.find(":")-1);
 				// making sure that the received message is valid
 				if(!std::all_of(oscValueString.begin(), oscValueString.end(), ::isdigit)){
 					float oscValue = stof(oscValueString);
 					//printf("Rec: %s: ",oscAddress.c_str());
 					//printf("%f\n", oscValue);
-					inMessage = inMessage.substr(inMessage.find("\n")+1,inMessage.find(";;")-inMessage.find("\n"));
+					inMessage = inMessage.substr(inMessage.find("\n")+1,inMessage.find("\n\n")-inMessage.find("\n"));
 			
 					// formating and sending the OSC message
 		    		p.Clear();
