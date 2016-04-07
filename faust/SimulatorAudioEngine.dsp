@@ -38,28 +38,28 @@ import("police.dsp");
 //#######################
 // PARAMETERS
 //#######################
-
+audio_on = checkbox("[0]o");
 engine_RPM = hslider("[2]VR",500,500,9000,0.01)+300 : smooth(0.999);
 speed = hslider("[3]VS",0,0,100,0.01) : smooth(0.999);
-engine_randomness = hslider("h:[1]ownship/[0]engine_randomness[style:knob]",0.25,0,1,0.01); 
-engine_turbulances = hslider("h:[1]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
-engine_compression = hslider("h:[1]ownship/[2]engine_compression[style:knob]",0.6,0,1,0.01);
-engine_brightness = hslider("h:[1]ownship/[3]engine_brightness[style:knob]",200,50,5000,1);
-ownship_freq = hslider("h:[1]ownship/[4]cutoffFreq[style:knob]",500,50,3000,0.1);
-engine_gain = hslider("h:[1]ownship/[5]engine_gain[style:knob]",1,0,1,0.01);
-roadNoise_gain = hslider("h:[1]ownship/[6]roadNoise_gain[style:knob]",1,0,1,0.01);
+engine_randomness = hslider("h:[4]ownship/[0]engine_randomness[style:knob]",0.25,0,1,0.01); 
+engine_turbulances = hslider("h:[4]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
+engine_compression = hslider("h:[4]ownship/[2]engine_compression[style:knob]",0.6,0,1,0.01);
+engine_brightness = hslider("h:[4]ownship/[3]engine_brightness[style:knob]",200,50,5000,1);
+ownship_freq = hslider("h:[4]ownship/[4]cutoffFreq[style:knob]",500,50,3000,0.1);
+engine_gain = hslider("h:[4]ownship/[5]engine_gain[style:knob]",1,0,1,0.01);
+roadNoise_gain = hslider("h:[4]ownship/[6]roadNoise_gain[style:knob]",1,0,1,0.01);
 
-simulator_bridge_gain = hslider("h:[0]gains/[0]simulator_bridge_gain[style:knob]",1,0,1,0.01);
-ownshipToOutside_gain = hslider("h:[0]gains/[1]ownshipToOutside_gain[style:knob]",1.0,0,1,0.01);
-ownshipToOwnship_gain = hslider("h:[0]gains/[2]ownshipToOwnship_gain[style:knob]",0.3,0,1,0.01);
-ownshipToOwnshipSub_gain = hslider("h:[0]gains/[3]ownshipToOwnshipSub_gain[style:knob]",1,0,1,0.01);
-sourcesToOutside_gain = hslider("h:[0]gains/[4]sourcesToOutside_gain[style:knob]",1,0,1,0.01);
-sourcesToOwnship_gain = hslider("h:[0]gains/[5]sourcesToOwnship_gain[style:knob]",0.8,0,1,0.01);
+simulator_bridge_gain = hslider("h:[1]gains/[0]simulator_bridge_gain[style:knob]",1,0,1,0.01);
+ownshipToOutside_gain = hslider("h:[1]gains/[1]ownshipToOutside_gain[style:knob]",1.0,0,1,0.01);
+ownshipToOwnship_gain = hslider("h:[1]gains/[2]ownshipToOwnship_gain[style:knob]",0.3,0,1,0.01);
+ownshipToOwnshipSub_gain = hslider("h:[1]gains/[3]ownshipToOwnshipSub_gain[style:knob]",1,0,1,0.01);
+sourcesToOutside_gain = hslider("h:[1]gains/[4]sourcesToOutside_gain[style:knob]",1,0,1,0.01);
+sourcesToOwnship_gain = hslider("h:[1]gains/[5]sourcesToOwnship_gain[style:knob]",0.8,0,1,0.01);
 
-countrySoundscape_gain = hslider("h:[4]S/[0]co[style:knob]",0.02,0,1,0.01) : smooth(0.999);
-citySoundscape_gain = hslider("h:[4]S/[1]ci[style:knob]",0.02,0,1,0.01) : smooth(0.999);
-carParkSoundscape_gain = hslider("h:[4]S/[2]ca[style:knob]",0.02,0,1,0.01) : smooth(0.999);
-//farmSoundscape_gain = hslider("h:[4]SS/[3]farmSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
+countrySoundscape_gain = hslider("h:[6]S/[0]co[style:knob]",0.02,0,1,0.01) : smooth(0.999);
+citySoundscape_gain = hslider("h:[6]S/[1]ci[style:knob]",0.02,0,1,0.01) : smooth(0.999);
+carParkSoundscape_gain = hslider("h:[6]S/[2]ca[style:knob]",0.02,0,1,0.01) : smooth(0.999);
+//farmSoundscape_gain = hslider("h:[6]SS/[3]farmSS_gain[style:knob]",0.02,0,1,0.01) : smooth(0.999);
 
 helicopter_gain = hslider("h:[5]SoundSources/[0]helicopter_gain[style:knob]",1.0,0,1,0.01);
 emergency_gain = hslider("h:[5]SoundSources/[1]emergency_gain[style:knob]",1.0,0,1,0.01);
@@ -123,7 +123,7 @@ ownshipSounds =
 sourceSpatInst(i) = sourceSpatXYZ(x,y,z) : 
 	par(i,10,*(sourcesToOutside_gain*on)), par(i,4,*(sourcesToOwnship_gain*on)), 0
 	with{		
-		on = button("h:s%i/o");
+		on = checkbox("h:s%i/o");
 		x = hslider("h:s%i/x[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
 		y = hslider("h:s%i/y[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
 		z = hslider("h:s%i/z[style:knob]",150,0,150,0.01)/150 : smooth(0.999);
@@ -160,14 +160,14 @@ ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*0.5*on <: 
 	with{	 
 		x = hslider("h:a/x[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
 		y = hslider("h:a/y[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
-		on = button("h:a/o");
+		on = checkbox("h:a/o");
 };
 
 // plane
 plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y,z) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{ 
-		on = button("h:pl/o");
+		on = checkbox("h:pl/o");
 		x = hslider("h:pl/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:pl/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		z = hslider("h:pl/z[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
@@ -176,14 +176,14 @@ plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y
 // train
 trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4) : stereoToSoundScape 
 	with{	 
-		on = button("h:t/o");
+		on = checkbox("h:t/o");
 };
 
 // bicycle
 bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable*0.7 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:b/o");	 
+		on = checkbox("h:b/o");	 
 		x = hslider("h:b/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:b/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -193,7 +193,7 @@ bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable*0.7 : sourceSp
 dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:d/o");	 
+		on = checkbox("h:d/o");	 
 		x = hslider("h:d/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:d/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -202,7 +202,7 @@ dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatX
 childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.6 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:c/o");	 
+		on = checkbox("h:c/o");	 
 		x = hslider("h:c/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:c/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -211,8 +211,8 @@ childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.6 : sourceSpatXY
 pipeclank = clank_0 , ((min(37350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:cl/o");	
-		//gain = button("h:clank/gain"); 
+		on = checkbox("h:cl/o");	
+		//gain = checkbox("h:clank/gain"); 
 		x = hslider("h:cl/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:cl/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -221,8 +221,8 @@ pipeclank = clank_0 , ((min(37350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y
 gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable*0.3 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:g/o");	
-		//gain = button("h:clank/gain"); 
+		on = checkbox("h:g/o");	
+		//gain = checkbox("h:clank/gain"); 
 		x = hslider("h:g/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:g/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -231,7 +231,7 @@ gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable*0.3 : sourceS
 crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.20 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:cr/o");	
+		on = checkbox("h:cr/o");	
 		x = hslider("h:cr/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:cr/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -240,7 +240,7 @@ crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.20 : 
 roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:r/o");	
+		on = checkbox("h:r/o");	
 		x = hslider("h:r/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:r/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -249,7 +249,7 @@ roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : s
 bldgconstruction = hammer_0 , ((min(585747)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:bc/o");	
+		on = checkbox("h:bc/o");	
 		x = hslider("h:bc/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:bc/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -258,7 +258,7 @@ bldgconstruction = hammer_0 , ((min(585747)*on) ~+(1) : int) : rdtable*1.5 : sou
 cattlesounds = cows_0 , ((min(1256849)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:f/o");	
+		on = checkbox("h:f/o");	
 		x = hslider("h:f/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:f/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -268,7 +268,7 @@ cattlesounds = cows_0 , ((min(1256849)*on) ~+(1) : int) : rdtable : sourceSpatXY
 pedwalk_s = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:p/o");	
+		on = checkbox("h:p/o");	
 		x = hslider("h:p/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:p/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -277,7 +277,7 @@ pedwalk_s = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = button("h:w/o");	
+		on = checkbox("h:w/o");	
 		x = hslider("h:w/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:w/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
@@ -319,6 +319,6 @@ audioEngine = vgroup("audioEngine",
 	outputPatch
 );
 
+//process = audio_on*audioEngine;
 process = audioEngine;
-
 //process = ambul;
