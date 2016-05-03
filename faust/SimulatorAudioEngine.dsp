@@ -35,6 +35,10 @@ import("hammer.dsp");
 import("pedwalk.dsp");
 import("police.dsp");
 
+// CCRMA Sound Icons
+import("Slow_Down.dsp");
+import("Speed_Up.dsp");
+
 //#######################
 // PARAMETERS
 //#######################
@@ -281,6 +285,14 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 		x = hslider("h:w/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:w/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
+
+
+// traffic slowing down icon
+//slowdown = Slow_Down_0 , ((min(207137)*on) ~+(1) : int) : rdtable ; // need number of samples from file
+
+// traffic slowing down icon
+//speedup = Speed_Up_0 , ((min(207137)*on) ~+(1) : int) : rdtable ; // need number of samples from file
+
 
 // car speakers output
 ownshipOut = par(i,4,ownshipFilter	(ownship_freq)),ownshipSubFilter(90);
