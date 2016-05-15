@@ -36,8 +36,16 @@ import("pedwalk.dsp");
 import("police.dsp");
 
 // CCRMA Sound Icons
-import("Slow_Down.dsp");
-import("Speed_Up.dsp");
+import("Construction1.dsp");
+
+import("GetPassed1.dsp");
+import("Pass1.dsp");
+
+import("Takeover1.dsp");
+import("GiveBack1.dsp");
+
+import("SlowDown1.dsp");
+import("SpeedUp1.dsp");
 
 //#######################
 // PARAMETERS
@@ -287,12 +295,58 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 };
 
 
-// traffic slowing down icon
-//slowdown = Slow_Down_0 , ((min(207137)*on) ~+(1) : int) : rdtable ; // need number of samples from file
+// Construction/osbstacle icon
+construction1 = Construction1_0 , ((min(114591)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+	with{
+		on = checkbox("h:construction/o");
+		x = hslider("h:construction/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:construction/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+	};
 
-// traffic slowing down icon
-//speedup = Speed_Up_0 , ((min(207137)*on) ~+(1) : int) : rdtable ; // need number of samples from file
+// Passing Icons
+getpassed1 = GetPassed1_0 , ((min(204100)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+	with{
+		on = checkbox("h:getpassed/o");
+		x = hslider("h:getpassed/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:getpassed/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+	};
 
+pass1 = Pass1_0 , ((min(183406)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+	with{
+		on = checkbox("h:pass/o");
+		x = hslider("h:pass/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:pass/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+	};
+
+// Transfer of control icons
+takeover1 = Takeover1_0 , ((min(322021)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+	with{
+		on = checkbox("h:takeover/o");
+		x = hslider("h:takeover/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:takeover/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+	};
+
+giveback1 = GiveBack1_0 , ((min(282217)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+	with{
+		on = checkbox("h:giveback/o");
+		x = hslider("h:giveback/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:giveback/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+	};
+
+// Traffic slowing down/speeding up icons
+slowdown1 = SlowDown1_0 , ((min(143325)*on) ~+(1) : int) : rdtable ;
+	with{
+		on = checkbox("h:slowdown/o");
+		x = hslider("h:slowdown/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:slowdown/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+	};
+
+speedup1 = SpeedUp1_0 , ((min(142567)*on) ~+(1) : int) : rdtable ;
+	with{
+		on = checkbox("h:speedup/o");
+		x = hslider("h:speedup/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:speedup/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
+	};
 
 // car speakers output
 ownshipOut = par(i,4,ownshipFilter	(ownship_freq)),ownshipSubFilter(90);
