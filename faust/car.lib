@@ -67,8 +67,9 @@ ownshipFilter(freq) = lowpass(4,freq);
 // 		freq: cut-off frequency
 ownshipSubFilter(freq) = lowpass(4,freq);
 
+// Simple quad panning function for meyers
 quadSpatXY(X,Y) =
-	doppler(distance)*distance2*1.4 : oneRing(nSpeakersR1, angle, spread))
+	doppler(distance)*distance2*1.4 : oneRing(nSpeakersR1, angle, spread)
 	with{
 		x = X : min(1) : max(-1); // just to be sure...
 		y = Y : min(1) : max(-1);
@@ -91,6 +92,7 @@ quadSpatXY(X,Y) =
 
 		// distance is only based on x and y, but z could be added if necessary...
 		distance = (sqrt(2)-sqrt(pow(x,2) + pow(y,2)))/sqrt(2);
+		distance2 = max(0,(1-sqrt(pow(x,2) + pow(y,2))));
 
 		// simple doppler effect (feedforward filter)
 		doppler(pos) = _ <: _+fdelay2(64,L) : *(0.5)
@@ -207,7 +209,7 @@ sourceSpatXYZ(X,Y,Z) =
 		;
 
 		angle = 1-XYToTheta(x,y,0.375);
-		elevation = z*1.5;
+		elevation = z*1.5;	
 
 		// distance is only based on x and y, but z could be added if necessary...
 		distance = (sqrt(3)-sqrt(pow(x,2) + pow(y,2) + pow(z,2)))/sqrt(3);
