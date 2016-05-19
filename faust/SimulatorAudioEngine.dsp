@@ -5,9 +5,9 @@
 // This Faust object is the "final product" that puts the different
 // sound generators together. It receives the OSC messages from the
 // simulator and sonifies them. The "parameters" section declares
-// all the parameters of the system. 
-// OSC addresses have the following shape: 
-// /audioEngine/simulatorParamName value 
+// all the parameters of the system.
+// OSC addresses have the following shape:
+// /audioEngine/simulatorParamName value
 
 import("car.lib");
 import("helicopter.dsp");
@@ -53,7 +53,7 @@ import("SpeedUp1.dsp");
 audio_on = checkbox("[0]o");
 engine_RPM = hslider("[2]VR",500,500,9000,0.01)+300 : smooth(0.999);
 speed = hslider("[3]VS",0,0,100,0.01) : smooth(0.999);
-engine_randomness = hslider("h:[4]ownship/[0]engine_randomness[style:knob]",0.25,0,1,0.01); 
+engine_randomness = hslider("h:[4]ownship/[0]engine_randomness[style:knob]",0.25,0,1,0.01);
 engine_turbulances = hslider("h:[4]ownship/[1]engine_turbulances[style:knob]",0.1,0,1,0.01);
 engine_compression = hslider("h:[4]ownship/[2]engine_compression[style:knob]",0.6,0,1,0.01);
 engine_brightness = hslider("h:[4]ownship/[3]engine_brightness[style:knob]",200,50,5000,1);
@@ -81,17 +81,17 @@ emergency_gain = hslider("h:[5]SoundSources/[1]emergency_gain[style:knob]",1.0,0
 //#######################
 
 // takes the sound from the simulator and bridge it to the lower speakers
-simulatorBridge(frontLeft,frontRight,rearLeft,rearRight,frontCenter,carSub) = 
-	frontLeft*simulator_bridge_gain, 
+simulatorBridge(frontLeft,frontRight,rearLeft,rearRight,frontCenter,carSub) =
+	frontLeft*simulator_bridge_gain,
 	frontRight*simulator_bridge_gain,
 	rearLeft*simulator_bridge_gain,
-	rearRight*simulator_bridge_gain, 
+	rearRight*simulator_bridge_gain,
 	frontCenter*simulator_bridge_gain,
 	par(i,5,0),
-	frontLeft*simulator_bridge_gain, 
+	frontLeft*simulator_bridge_gain,
 	frontRight*simulator_bridge_gain,
 	rearLeft*simulator_bridge_gain,
-	rearRight*simulator_bridge_gain, 
+	rearRight*simulator_bridge_gain,
 	carSub;
 
 reverb = _,_ <: (*(g)*fixedgain,*(g)*fixedgain : stereo_freeverb(combfeed, allpassfeed, damping, spatSpread)), *(1-g), *(1-g) :> _,_ with{
@@ -124,17 +124,17 @@ ambReverb = _,_ <: (*(g)*fixedgain,*(g)*fixedgain : stereo_freeverb(combfeed, al
 ownshipSounds =
 		// car engine
 		carEngine(engine_RPM,engine_randomness,engine_turbulances,engine_compression,engine_brightness)*engine_gain
-		<: 
-		(reverb <: par(i,4,*(ownshipToOutside_gain))), 
-		par(i,6,0), 
+		<:
+		(reverb <: par(i,4,*(ownshipToOutside_gain))),
+		par(i,6,0),
 		(roadNoise(speed)*roadNoise_gain*2 + _ <: // road noise only going to ownship
 			(par(i,4,*(ownshipToOwnship_gain)), *(ownshipToOwnshipSub_gain)))
 ;
 
 // abstraction of the source spatializer with "i" the iteration number
-sourceSpatInst(i) = sourceSpatXYZ(x,y,z) : 
+sourceSpatInst(i) = sourceSpatXYZ(x,y,z) :
 	par(i,10,*(sourcesToOutside_gain*on)), par(i,4,*(sourcesToOwnship_gain*on)), 0
-	with{		
+	with{
 		on = checkbox("h:s%i/o");
 		x = hslider("h:s%i/x[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
 		y = hslider("h:s%i/y[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
@@ -142,9 +142,9 @@ sourceSpatInst(i) = sourceSpatXYZ(x,y,z) :
 };
 
 // special case of the source spatilizer for a moving car
-movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) : 
+movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
-	with{		 
+	with{
 		v = hslider("h:c%i/v[style:knob]",0,0,60,0.01)/50.0+0.02;// : smooth(0.999); // cc added velocity range 0 - 50m/s
 		x = hslider("h:c%i/x[style:knob]",50,-50,50,0.01)/50;// : smooth(0.999);
 		y = hslider("h:c%i/y[style:knob]",50,-50,50,0.01)/50;// : smooth(0.999);
@@ -167,18 +167,18 @@ cityScape = (CitySkylineL_0, (%(992412) ~+(1) : int) : rdtable*0.35*citySoundsca
 carParkScape = (carParkL_0, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain), (carParkR_1, (%(1166124) ~+(1) : int) : rdtable*0.5*carParkSoundscape_gain) : stereoToSoundScape;
 
 // ambulance
-ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*0.5*on <: ambReverb :> sourceSpatXY(x,y) : 
+ambul = ambulance_0 , (%(16944) ~+(1) : int) : rdtable*emergency_gain*0.5*on <: ambReverb :> sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
-	with{	 
+	with{
 		x = hslider("h:a/x[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
 		y = hslider("h:a/y[style:knob]",150,-150,150,0.01)/150 : smooth(0.999);
 		on = checkbox("h:a/o");
 };
 
 // plane
-plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y,z) : 
+plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y,z) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
-	with{ 
+	with{
 		on = checkbox("h:pl/o");
 		x = hslider("h:pl/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:pl/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
@@ -186,117 +186,117 @@ plane_flying = plane_0 , (%(53082) ~+(1) : int) : rdtable*on : sourceSpatXYZ(x,y
 };
 
 // train
-trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4) : stereoToSoundScape 
-	with{	 
+trains = (trainL_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4), (trainR_0, ((min(950289)*on) ~+(1) : int)  : rdtable*0.4) : stereoToSoundScape
+	with{
 		on = checkbox("h:t/o");
 };
 
 // bicycle
-bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable*0.7 : sourceSpatXY(x,y) : 
+bicycle = bicycleBell_0 , ((min(53082)*on) ~+(1) : int) : rdtable*0.7 : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:b/o");	 
+		on = checkbox("h:b/o");
 		x = hslider("h:b/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:b/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 
 // dogbark
-dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatXY(x,y) : 
+dogwoof = dogbark_0 , ((min(26653)*on) ~+(1) : int) : rdtable*0.35 : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:d/o");	 
+		on = checkbox("h:d/o");
 		x = hslider("h:d/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:d/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // child
-childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.6 : sourceSpatXY(x,y) : 
+childtalk = child_0 , ((min(76590)*on) ~+(1) : int) : rdtable*0.6 : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:c/o");	 
+		on = checkbox("h:c/o");
 		x = hslider("h:c/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:c/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // clank
-pipeclank = clank_0 , ((min(37350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+pipeclank = clank_0 , ((min(37350)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:cl/o");	
-		//gain = checkbox("h:clank/gain"); 
+		on = checkbox("h:cl/o");
+		//gain = checkbox("h:clank/gain");
 		x = hslider("h:cl/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:cl/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // garbage truck
-gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable*0.3 : sourceSpatXY(x,y) : 
+gtruck = garbagetruck_0 , ((min(549253)*on) ~+(1) : int) : rdtable*0.3 : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:g/o");	
-		//gain = checkbox("h:clank/gain"); 
+		on = checkbox("h:g/o");
+		//gain = checkbox("h:clank/gain");
 		x = hslider("h:g/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:g/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // beeping for pedestrian crossing
-crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.20 : sourceSpatXY(x,y) : 
+crosswalkbeep = cuckooBeeps_0 , ((min(536458)*on) ~+(1) : int) : rdtable*0.20 : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:cr/o");	
+		on = checkbox("h:cr/o");
 		x = hslider("h:cr/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:cr/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // road construction noise
-roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+roadconstruction = RoadDrilling_0 , ((min(844009)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:r/o");	
+		on = checkbox("h:r/o");
 		x = hslider("h:r/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:r/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // building construction noise
-bldgconstruction = hammer_0 , ((min(585747)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) : 
+bldgconstruction = hammer_0 , ((min(585747)*on) ~+(1) : int) : rdtable*1.5 : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:bc/o");	
+		on = checkbox("h:bc/o");
 		x = hslider("h:bc/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:bc/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // farm cattle noise
-cattlesounds = cows_0 , ((min(1256849)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+cattlesounds = cows_0 , ((min(1256849)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:f/o");	
+		on = checkbox("h:f/o");
 		x = hslider("h:f/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:f/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 
 // pedestrian walking and talking
-pedwalk_s = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+pedwalk_s = pedwalk_0 , ((min(292570)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:p/o");	
+		on = checkbox("h:p/o");
 		x = hslider("h:p/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:p/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 // police car sound
-woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) : 
+woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(x,y) :
 	par(i,10,*(sourcesToOutside_gain)), par(i,4,*(sourcesToOwnship_gain)), 0
 	with{
-		on = checkbox("h:w/o");	
+		on = checkbox("h:w/o");
 		x = hslider("h:w/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:w/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 };
 
 
 // Construction/osbstacle icon
-construction1 = Construction1_0 , ((min(114591)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+construction1 = Construction1_0 , ((min(114591)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y)
 	with{
 		on = checkbox("h:construction/o");
 		x = hslider("h:construction/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
@@ -304,14 +304,14 @@ construction1 = Construction1_0 , ((min(114591)*on) ~+(1) : int) : rdtable : qua
 	};
 
 // Passing Icons
-getpassed1 = GetPassed1_0 , ((min(204100)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+getpassed1 = GetPassed1_0 , ((min(204100)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y)
 	with{
 		on = checkbox("h:getpassed/o");
 		x = hslider("h:getpassed/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:getpassed/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-pass1 = Pass1_0 , ((min(183406)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+pass1 = Pass1_0 , ((min(183406)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y)
 	with{
 		on = checkbox("h:pass/o");
 		x = hslider("h:pass/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
@@ -319,14 +319,14 @@ pass1 = Pass1_0 , ((min(183406)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	};
 
 // Transfer of control icons
-takeover1 = Takeover1_0 , ((min(322021)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+takeover1 = Takeover1_0 , ((min(322021)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y)
 	with{
 		on = checkbox("h:takeover/o");
 		x = hslider("h:takeover/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:takeover/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-giveback1 = GiveBack1_0 , ((min(282217)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+giveback1 = GiveBack1_0 , ((min(282217)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y)
 	with{
 		on = checkbox("h:giveback/o");
 		x = hslider("h:giveback/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
@@ -334,14 +334,14 @@ giveback1 = GiveBack1_0 , ((min(282217)*on) ~+(1) : int) : rdtable : quadSpatXY(
 	};
 
 // Traffic slowing down/speeding up icons
-slowdown1 = SlowDown1_0 , ((min(143325)*on) ~+(1) : int) : rdtable ;
+slowdown1 = SlowDown1_0 , ((min(143325)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y)
 	with{
 		on = checkbox("h:slowdown/o");
 		x = hslider("h:slowdown/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 		y = hslider("h:slowdown/y[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-speedup1 = SpeedUp1_0 , ((min(142567)*on) ~+(1) : int) : rdtable ;
+speedup1 = SpeedUp1_0 , ((min(142567)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y)
 	with{
 		on = checkbox("h:speedup/o");
 		x = hslider("h:speedup/x[style:knob]",50,-50,50,0.01)/50 : smooth(0.999);
@@ -353,7 +353,7 @@ ownshipOut = par(i,4,ownshipFilter	(ownship_freq)),ownshipSubFilter(90);
 
 // routing the signals to the right channels
 outputPatch(lowFrontLeft,lowFrontRight,lowRearLeft,lowRearRight,lowFrontCenter,highFrontLeft,highFrontRight,highRearLeft,highRearRight,highCenter,ownshipFrontLeft,ownshipFrontRight,ownshipRearLeft,ownshipRearRight,
-carSub) = 
+carSub) =
 	lowFrontLeft,lowFrontRight,lowRearLeft,lowRearRight,lowFrontCenter,
 	highFrontLeft,highFrontRight,highRearLeft,highRearRight,highCenter,
 	ownshipOut(ownshipFrontLeft,ownshipFrontRight,ownshipRearLeft,ownshipRearRight,carSub);
@@ -380,11 +380,24 @@ audioEngine = vgroup("audioEngine",
 	carParkScape,
 	pedwalk_s,
 	woobwoob_s,
-	ownshipSounds  
+	ownshipSounds
 	:>
 	outputPatch
 );
 
+// Meyer Internal Speakers
+meyerOut =vgroup("meyerOut",
+	construction1,
+	getpassed1,
+	pass1,
+	takeover1,
+	giveback1,
+	slowdown1,
+	speedup1
+	:>
+	_,_,_,_
+);
+
 //process = audio_on*audioEngine;
-process = audioEngine;
+process = audioEngine,meyerOut;
 //process = ambul;
