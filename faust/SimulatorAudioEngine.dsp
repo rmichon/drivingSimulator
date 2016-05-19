@@ -300,7 +300,7 @@ meyerGain = hslider("Meyer_Gain",0.15,0.0,1.0,0.01) : smooth(0.999);
 
 
 // Construction/osbstacle icon
-construction1 = Construction1_0 , ((min(114591)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+construction1 = Construction1_0 , ((min(111925)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:construction/o");
@@ -309,7 +309,7 @@ construction1 = Construction1_0 , ((min(114591)*on) ~+(1) : int) : rdtable : qua
 	};
 
 // Passing Icons
-getpassed1 = GetPassed1_0 , ((min(204100)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+getpassed1 = GetPassed1_0 , ((min(209225)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:getpassed/o");
@@ -317,7 +317,7 @@ getpassed1 = GetPassed1_0 , ((min(204100)*on) ~+(1) : int) : rdtable : quadSpatX
 		y = hslider("h:getpassed/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-pass1 = Pass1_0 , ((min(183406)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+pass1 = Pass1_0 , ((min(198900)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:pass/o");
@@ -326,7 +326,7 @@ pass1 = Pass1_0 , ((min(183406)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	};
 
 // Transfer of control icons
-takeover1 = Takeover1_0 , ((min(322021)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+takeover1 = Takeover1_0 , ((min(259450)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:takeover/o");
@@ -334,7 +334,7 @@ takeover1 = Takeover1_0 , ((min(322021)*on) ~+(1) : int) : rdtable : quadSpatXY(
 		y = hslider("h:takeover/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-giveback1 = GiveBack1_0 , ((min(282217)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+giveback1 = GiveBack1_0 , ((min(309625)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:giveback/o");
@@ -343,7 +343,7 @@ giveback1 = GiveBack1_0 , ((min(282217)*on) ~+(1) : int) : rdtable : quadSpatXY(
 	};
 
 // Traffic slowing down/speeding up icons
-slowdown1 = SlowDown1_0 , ((min(143325)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+slowdown1 = SlowDown1_0 , ((min(132175)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:slowdown/o");
@@ -351,7 +351,7 @@ slowdown1 = SlowDown1_0 , ((min(143325)*on) ~+(1) : int) : rdtable : quadSpatXY(
 		y = hslider("h:slowdown/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-speedup1 = SpeedUp1_0 , ((min(142567)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+speedup1 = SpeedUp1_0 , ((min(123875)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:speedup/o");
