@@ -36,16 +36,17 @@ import("pedwalk.dsp");
 import("police.dsp");
 
 // CCRMA Sound Icons
-import("Construction1.dsp");
+import("Obstacle_1.dsp");
 
-import("GetPassed1.dsp");
-import("Pass1.dsp");
+import("GetPassed_1.dsp");
+import("Pass_1.dsp");
 
-import("Takeover1.dsp");
-import("GiveBack1.dsp");
+import("Takeover_1.dsp");
+import("GiveBack_1.dsp");
 
-import("SlowDown1.dsp");
-import("SpeedUp1.dsp");
+import("SlowDown_1.dsp");
+import("SpeedUp_1.dsp");
+
 
 //#######################
 // PARAMETERS
@@ -296,67 +297,66 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 
 
 // Global gain on Meyer speakers
-meyerGain = hslider("Meyer_Gain",0.15,0.0,1.0,0.01) : smooth(0.999);
+meyerGain = hslider("Meyer_Gain",0.05,0.0,1.0,0.01) : smooth(0.999);
 
-
-// Construction/osbstacle icon
-construction1 = Construction1_0 , ((min(111925)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+// Obstacle Icon
+obstacle_1 = Obstacle_1_0 , ((min(210432)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
-		on = checkbox("h:construction/o");
-		x = hslider("h:construction/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:construction/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		on = checkbox("h:o/o");
+		x = hslider("h:o/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:o/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
 // Passing Icons
-getpassed1 = GetPassed1_0 , ((min(209225)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+getpassed_1 = GetPassed_1_0 , ((min(226816)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
-		on = checkbox("h:getpassed/o");
-		x = hslider("h:getpassed/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:getpassed/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		on = checkbox("h:gp/o");
+		x = hslider("h:gp/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:gp/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-pass1 = Pass1_0 , ((min(198900)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+pass_1 = Pass_1_0 , ((min(235008)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
-		on = checkbox("h:pass/o");
-		x = hslider("h:pass/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:pass/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		on = checkbox("h:pa/o");
+		x = hslider("h:pa/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:pa/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
 // Transfer of control icons
-takeover1 = Takeover1_0 , ((min(259450)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+takeover_1 = Takeover_1_0 , ((min(408064)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
-		on = checkbox("h:takeover/o");
-		x = hslider("h:takeover/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:takeover/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		on = checkbox("h:to/o");
+		x = hslider("h:to/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:to/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-giveback1 = GiveBack1_0 , ((min(309625)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+giveback_1 = GiveBack_1_0 , ((min(387584)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
-		on = checkbox("h:giveback/o");
-		x = hslider("h:giveback/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:giveback/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		on = checkbox("h:gb/o");
+		x = hslider("h:gb/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:gb/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
 // Traffic slowing down/speeding up icons
-slowdown1 = SlowDown1_0 , ((min(132175)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+slowdown_1 = SlowDown_1_0 , ((min(230400)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
-		on = checkbox("h:slowdown/o");
-		x = hslider("h:slowdown/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:slowdown/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		on = checkbox("h:sd/o");
+		x = hslider("h:sd/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:sd/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-speedup1 = SpeedUp1_0 , ((min(123875)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+speedup_1 = SpeedUp_1_0 , ((min(245760)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
-		on = checkbox("h:speedup/o");
-		x = hslider("h:speedup/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:speedup/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		on = checkbox("h:su/o");
+		x = hslider("h:su/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:su/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
 // car speakers output
@@ -398,13 +398,13 @@ audioEngine = vgroup("audioEngine",
 
 // Meyer Internal Speakers
 meyerOut =vgroup("meyerOut",
-	construction1,
-	getpassed1,
-	pass1,
-	takeover1,
-	giveback1,
-	slowdown1,
-	speedup1
+	obstacle_1,
+	getpassed_1,
+	pass_1,
+	takeover_1,
+	giveback_1,
+	slowdown_1,
+	speedup_1
 	:>
 	_,_,_,_
 );
