@@ -370,6 +370,7 @@ carSub) =
 
 // putting things together
 audioEngine = vgroup("audioEngine",
+	// Driving environment sounds
 	simulatorBridge,
 	par(i,1,spatSound(i)),
 	par(i,52,movCar(i)),
@@ -391,11 +392,9 @@ audioEngine = vgroup("audioEngine",
 	woobwoob_s,
 	ownshipSounds  
 	:>
-	outputPatch
-);
-
-// Meyer Internal Speakers
-meyerOut =vgroup("meyerOut",
+	outputPatch,
+	// Audio Icons (meyer speakers)
+	0,
 	obstacle_1,
 	getpassed_1,
 	pass_1,
@@ -407,13 +406,4 @@ meyerOut =vgroup("meyerOut",
 	_,_,_,_
 );
 
-// Working around a bug by combining these
-audioPlusQuad = vgroup("audioPlusQuad",
-	audioEngine,
-	0,
-	meyerOut
-);
-
-//process = audio_on*audioEngine;
 process = audioEngine;
-//process = ambul;
