@@ -394,6 +394,19 @@ audioEngine = vgroup("audioEngine",
 	outputPatch
 );
 
+// Meyer Internal Speakers
+meyerOut =vgroup("meyerOut",
+	obstacle_1,
+	getpassed_1,
+	pass_1,
+	takeover_1,
+	giveback_1,
+	slowdown_1,
+	speedup_1
+	:>
+	_,_,_,_
+);
+
 //process = audio_on*audioEngine;
 process = audioEngine;
 //process = ambul;
