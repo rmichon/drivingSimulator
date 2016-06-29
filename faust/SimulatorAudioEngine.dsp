@@ -368,8 +368,21 @@ carSub) =
 	ownshipOut(ownshipFrontLeft,ownshipFrontRight,ownshipRearLeft,ownshipRearRight,carSub);
 
 
+// Audio Icons (meyer speakers)
+meyerOut =
+	obstacle_1,
+	getpassed_1,
+	pass_1,
+	takeover_1,
+	giveback_1,
+	slowdown_1,
+	speedup_1
+	:>
+	_,_,_,_
+;
+
 // putting things together
-audioEngine = vgroup("audioEngine",
+environmentOut = 
 	// Driving environment sounds
 	simulatorBridge,
 	par(i,1,spatSound(i)),
@@ -392,18 +405,13 @@ audioEngine = vgroup("audioEngine",
 	woobwoob_s,
 	ownshipSounds  
 	:>
-	outputPatch,
-	// Audio Icons (meyer speakers)
+	outputPatch
+;
+
+audioEngine = vgroup("audioEngine",
+	environmentOut,
 	0,
-	obstacle_1,
-	getpassed_1,
-	pass_1,
-	takeover_1,
-	giveback_1,
-	slowdown_1,
-	speedup_1
-	:>
-	_,_,_,_
+	meyerOut
 );
 
 process = audioEngine;
