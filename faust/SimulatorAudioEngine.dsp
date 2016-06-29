@@ -35,6 +35,18 @@ import("hammer.dsp");
 import("pedwalk.dsp");
 import("police.dsp");
 
+// CCRMA Sound Icons
+import("Obstacle_1.dsp");
+
+import("GetPassed_1.dsp");
+import("Pass_1.dsp");
+
+import("Takeover_1.dsp");
+import("GiveBack_1.dsp");
+
+import("SlowDown_1.dsp");
+import("SpeedUp_1.dsp");
+
 //#######################
 // PARAMETERS
 //#######################
