@@ -407,6 +407,13 @@ meyerOut =vgroup("meyerOut",
 	_,_,_,_
 );
 
+// Working around a bug by combining these
+audioPlusQuad = vgroup("audioPlusQuad",
+	audioEngine,
+	0,
+	meyerOut
+);
+
 //process = audio_on*audioEngine;
 process = audioEngine;
 //process = ambul;
