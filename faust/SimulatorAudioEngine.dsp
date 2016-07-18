@@ -47,6 +47,10 @@ import("GiveBack_1.dsp");
 import("SlowDown_1.dsp");
 import("SpeedUp_1.dsp");
 
+import("BlindSpot.dsp");
+import("EmVehicle.dsp");
+import("Tailgate.dsp");
+
 //#######################
 // PARAMETERS
 //#######################
@@ -357,6 +361,33 @@ speedup_1 = SpeedUp_1_0 , ((min(245760)*on) ~+(1) : int) : rdtable :  quadSpatXY
 		y = hslider("h:su/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
+// Car in Blind Spot Icon
+blindSpot = BlindSpot_0 , ((min(256512)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain))
+	with{
+		on = checkbox("h:bs/o");
+		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+	};
+
+// Emergency Vehicle Icon
+emVehicle = EmVehicle_0 , ((min(335872)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain))
+	with{
+		on = checkbox("h:ev/o");
+		x = hslider("h:ev/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:ev/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+	};
+
+// Tailgator Icon
+tailgate = Tailgate_0 , ((min(296448)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain))
+	with{
+		on = checkbox("h:tg/o");
+		x = hslider("h:tg/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:tg/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+	};
+
 // car speakers output
 ownshipOut = par(i,4,ownshipFilter	(ownship_freq)),ownshipSubFilter(90);
 
@@ -370,6 +401,9 @@ carSub) =
 
 // Audio Icons (meyer speakers)
 meyerOut =
+	tailgate,
+	emVehicle,
+	blindSpot,
 	obstacle_1,
 	getpassed_1,
 	pass_1,
