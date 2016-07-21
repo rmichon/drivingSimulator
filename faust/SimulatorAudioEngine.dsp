@@ -306,8 +306,8 @@ obstacle_1 = Obstacle_1_0 , ((min(210432)*on) ~+(1) : int) : rdtable : quadSpatX
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:o/o");
-		x = hslider("h:o/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:o/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		x = hslider("h:o/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		y = hslider("h:o/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
 	};
 
 // Passing Icons
@@ -366,8 +366,8 @@ blindSpot = BlindSpot_0 , ((min(256512)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:bs/o");
-		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
 	};
 
 // Emergency Vehicle Icon
@@ -375,8 +375,8 @@ emVehicle = EmVehicle_0 , ((min(335872)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:ev/o");
-		x = hslider("h:ev/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:ev/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		x = hslider("h:ev/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		y = hslider("h:ev/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
 	};
 
 // Tailgator Icon
@@ -384,8 +384,8 @@ tailgate = Tailgate_0 , ((min(296448)*on) ~+(1) : int) : rdtable :  quadSpatXY(x
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:tg/o");
-		x = hslider("h:tg/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:tg/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		x = hslider("h:tg/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		y = hslider("h:tg/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
 	};
 
 // car speakers output
@@ -432,7 +432,7 @@ environmentOut =
 	bldgconstruction,
 	cattlesounds,
 	trains,
-	countryScape,
+	//countryScape,
 	cityScape,
 	carParkScape,
 	pedwalk_s,
