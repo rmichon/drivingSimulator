@@ -388,7 +388,7 @@ tailgate = Tailgate_0, ((min(296448)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,
 	};
 
 // Questionnaire Prompt
-Questionnaire = questionnaire_0 , ((min(42693)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+Questionnaire = questionnaire_0 , ((min(130560)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:q/o");
@@ -441,9 +441,9 @@ environmentOut =
 	bldgconstruction,
 	cattlesounds,
 	trains,
-	//countryScape,
+	countryScape,
 	cityScape,
-	carParkScape,
+	//carParkScape,
 	pedwalk_s,
 	woobwoob_s,
 	ownshipSounds  
