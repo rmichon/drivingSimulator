@@ -37,19 +37,18 @@ import("police.dsp");
 
 // CCRMA Sound Icons
 import("Obstacle_1.dsp");
-
 import("GetPassed_1.dsp");
 import("Pass_1.dsp");
-
 import("Takeover_1.dsp");
 import("GiveBack_1.dsp");
-
 import("SlowDown_1.dsp");
 import("SpeedUp_1.dsp");
-
 import("BlindSpot.dsp");
 import("EmVehicle.dsp");
 import("Tailgate.dsp");
+
+// Questionnaire Prompt
+import("questionnaire.dsp");
 
 //#######################
 // PARAMETERS
@@ -380,12 +379,21 @@ emVehicle = EmVehicle_0 , ((min(335872)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Tailgator Icon
-tailgate = Tailgate_0 , ((min(296448)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+tailgate = Tailgate_0, ((min(296448)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:tg/o");
 		x = hslider("h:tg/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
 		y = hslider("h:tg/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+	};
+
+// Questionnaire Prompt
+Questionnaire = questionnaire_0 , ((min(42693)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain))
+	with{
+		on = checkbox("h:q/o");
+		x = 0;
+		y = 0;
 	};
 
 // car speakers output
@@ -401,6 +409,7 @@ carSub) =
 
 // Audio Icons (meyer speakers)
 meyerOut =
+	Questionnaire,
 	tailgate,
 	emVehicle,
 	blindSpot,
