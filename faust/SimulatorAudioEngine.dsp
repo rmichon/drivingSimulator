@@ -36,7 +36,7 @@ import("pedwalk.dsp");
 import("police.dsp");
 
 // CCRMA Sound Icons
-import("Obstacle_1.dsp");
+import("Obstacle.dsp");
 import("GetPassed_1.dsp");
 import("Pass_1.dsp");
 import("Takeover_1.dsp");
@@ -301,7 +301,7 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 meyerGain = hslider("Meyer_Gain",0.05,0.0,1.0,0.01) : smooth(0.999);
 
 // Obstacle Icon
-obstacle_1 = Obstacle_1_0 , ((min(210432)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+obstacle = Obstacle_0 , ((min(116864)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:o/o");
@@ -361,7 +361,7 @@ speedup_1 = SpeedUp_1_0 , ((min(245760)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Car in Blind Spot Icon
-blindSpot = BlindSpot_0 , ((min(256512)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+blindSpot = BlindSpot_0 , ((min(601088)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:bs/o");
@@ -370,7 +370,7 @@ blindSpot = BlindSpot_0 , ((min(256512)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Emergency Vehicle Icon
-emVehicle = EmVehicle_0 , ((min(335872)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+emVehicle = EmVehicle_0 , ((min(331264)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:ev/o");
@@ -379,7 +379,7 @@ emVehicle = EmVehicle_0 , ((min(335872)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Tailgator Icon
-tailgate = Tailgate_0, ((min(296448)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+tailgate = Tailgate_0, ((min(553472)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:tg/o");
@@ -413,7 +413,7 @@ meyerOut =
 	tailgate,
 	emVehicle,
 	blindSpot,
-	obstacle_1,
+	obstacle,
 	getpassed_1,
 	pass_1,
 	takeover_1,
@@ -442,7 +442,7 @@ environmentOut =
 	cattlesounds,
 	trains,
 	countryScape,
-	cityScape,
+	//cityScape,
 	//carParkScape,
 	pedwalk_s,
 	woobwoob_s,
