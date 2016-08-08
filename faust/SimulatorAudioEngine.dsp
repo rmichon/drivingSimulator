@@ -301,7 +301,7 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 meyerGain = hslider("Meyer_Gain",0.05,0.0,1.0,0.01) : smooth(0.999);
 
 // Obstacle Icon
-obstacle = Obstacle_0 , ((min(116864)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+obstacle = Obstacle_0 , ((min(1094656)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:o/o");
@@ -361,16 +361,16 @@ speedup_1 = SpeedUp_1_0 , ((min(245760)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Car in Blind Spot Icon
-blindSpot = BlindSpot_0 , ((min(601088)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+blindSpot = BlindSpot_0 , ((min(673280)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:bs/o");
-		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
-		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
 // Emergency Vehicle Icon
-emVehicle = EmVehicle_0 , ((min(331264)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+emVehicle = EmVehicle_0 , ((min(947712)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:ev/o");
@@ -379,7 +379,7 @@ emVehicle = EmVehicle_0 , ((min(331264)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Tailgator Icon
-tailgate = Tailgate_0, ((min(553472)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+tailgate = Tailgate_0, ((min(743936)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:tg/o");
@@ -414,10 +414,10 @@ meyerOut =
 	emVehicle,
 	blindSpot,
 	obstacle,
-	getpassed_1,
-	pass_1,
-	takeover_1,
-	giveback_1,
+	//getpassed_1,
+	//pass_1,
+	//takeover_1,
+	//giveback_1,
 	slowdown_1,
 	speedup_1
 	:>
@@ -430,22 +430,22 @@ environmentOut =
 	simulatorBridge,
 	par(i,1,spatSound(i)),
 	par(i,52,movCar(i)),
-	ambul,
-	bicycle,
-	dogwoof,
-	childtalk,
-	pipeclank,
-	gtruck,
-	crosswalkbeep,
-	roadconstruction,
-	bldgconstruction,
-	cattlesounds,
-	trains,
+	//ambul,
+	//bicycle,
+	//dogwoof,
+	//childtalk,
+	//pipeclank,
+	//gtruck,
+	//crosswalkbeep,
+	//roadconstruction,
+	//bldgconstruction,
+	//cattlesounds,
+	//trains,
 	countryScape,
 	//cityScape,
 	//carParkScape,
-	pedwalk_s,
-	woobwoob_s,
+	//pedwalk_s,
+	//woobwoob_s,
 	ownshipSounds  
 	:>
 	outputPatch
