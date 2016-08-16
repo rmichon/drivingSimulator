@@ -298,7 +298,7 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 };
 
 // Global gain on Meyer speakers
-meyerGain = hslider("Meyer_Gain",0.05,0.0,1.0,0.01) : smooth(0.999);
+meyerGain = hslider("Meyer_Gain",0.04,0.0,1.0,0.01) : smooth(0.999);
 
 // Obstacle Icon
 obstacle = Obstacle_0 , ((min(1094656)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
@@ -365,8 +365,8 @@ blindSpot = BlindSpot_0 , ((min(673280)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:bs/o");
-		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/25 : smooth(0.999);
+		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/25 : smooth(0.999);
 	};
 
 // Emergency Vehicle Icon
@@ -374,8 +374,8 @@ emVehicle = EmVehicle_0 , ((min(947712)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:ev/o");
-		x = hslider("h:ev/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
-		y = hslider("h:ev/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		x = hslider("h:ev/x[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
+		y = hslider("h:ev/y[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
 	};
 
 // Tailgator Icon
@@ -383,8 +383,8 @@ tailgate = Tailgate_0, ((min(743936)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:tg/o");
-		x = hslider("h:tg/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
-		y = hslider("h:tg/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		x = hslider("h:tg/x[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
+		y = hslider("h:tg/y[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
 	};
 
 // Questionnaire Prompt
