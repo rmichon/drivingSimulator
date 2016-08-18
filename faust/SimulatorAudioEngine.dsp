@@ -298,10 +298,12 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 };
 
 // Global gain on Meyer speakers
-meyerGain = hslider("Meyer_Gain",0.04,0.0,1.0,0.01) : smooth(0.999);
+meyerGain = hslider("Meyer_Gain",0.03,0.0,1.0,0.01); 
+// Another gain for sounds designated as 'ambient'
+ambientGain = hslider("Ambient_Gain",0.5,0.0,1.0,0.01);
 
 // Obstacle Icon
-obstacle = Obstacle_0 , ((min(1094656)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+obstacle = Obstacle_0 , ((min(230912)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:o/o");
@@ -361,8 +363,8 @@ speedup_1 = SpeedUp_1_0 , ((min(245760)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Car in Blind Spot Icon
-blindSpot = BlindSpot_0 , ((min(673280)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
-	par(i,4,*(meyerGain))
+blindSpot = BlindSpot_0 , ((min(888832)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain*ambientGain))
 	with{
 		on = checkbox("h:bs/o");
 		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/25 : smooth(0.999);
@@ -379,8 +381,8 @@ emVehicle = EmVehicle_0 , ((min(947712)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Tailgator Icon
-tailgate = Tailgate_0, ((min(743936)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
-	par(i,4,*(meyerGain))
+tailgate = Tailgate_0, ((min(819200)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain*ambientGain))
 	with{
 		on = checkbox("h:tg/o");
 		x = hslider("h:tg/x[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
