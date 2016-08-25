@@ -38,7 +38,7 @@ import("police.dsp");
 // CCRMA Sound Icons
 import("Obstacle.dsp");
 import("GetPassed_1.dsp");
-import("Pass_1.dsp");
+import("Pass.dsp");
 import("Takeover_1.dsp");
 import("GiveBack_1.dsp");
 import("SlowDown_1.dsp");
@@ -320,12 +320,12 @@ getpassed_1 = GetPassed_1_0 , ((min(226816)*on) ~+(1) : int) : rdtable : quadSpa
 		y = hslider("h:gp/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
 	};
 
-pass_1 = Pass_1_0 , ((min(235008)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
-	par(i,4,*(meyerGain))
+pass = Pass_0 , ((min(904704)*on) ~+(1) : int) : rdtable : quadSpatXY(x,y) :
+	par(i,4,*(meyerGain*ambientGain))
 	with{
 		on = checkbox("h:pa/o");
-		x = hslider("h:pa/x[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
-		y = hslider("h:pa/y[style:knob]",0,-50,50,0.01)/50 : smooth(0.999);
+		x = hslider("h:pa/x[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
+		y = hslider("h:pa/y[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
 	};
 
 // Transfer of control icons
@@ -372,12 +372,12 @@ blindSpot = BlindSpot_0 , ((min(888832)*on) ~+(1) : int) : rdtable :  quadSpatXY
 	};
 
 // Emergency Vehicle Icon
-emVehicle = EmVehicle_0 , ((min(947712)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
-	par(i,4,*(meyerGain))
+emVehicle = EmVehicle_0 , ((min(1191936)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain*ambientGain))
 	with{
 		on = checkbox("h:ev/o");
-		x = hslider("h:ev/x[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
-		y = hslider("h:ev/y[style:knob]",0,-50,50,0.01)/40 : smooth(0.999);
+		x = hslider("h:ev/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		y = hslider("h:ev/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
 	};
 
 // Tailgator Icon
@@ -417,7 +417,7 @@ meyerOut =
 	blindSpot,
 	obstacle,
 	//getpassed_1,
-	//pass_1,
+	pass,
 	//takeover_1,
 	//giveback_1,
 	slowdown_1,
@@ -447,7 +447,7 @@ environmentOut =
 	//cityScape,
 	//carParkScape,
 	//pedwalk_s,
-	//woobwoob_s,
+	woobwoob_s,
 	ownshipSounds  
 	:>
 	outputPatch
