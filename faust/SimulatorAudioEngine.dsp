@@ -13,6 +13,7 @@ import("car.lib");
 import("helicopter.dsp");
 import("ambulance.dsp");
 
+import("Country_Mono.dsp"); // New Banshee country soundscape
 import("countrysideL.dsp");
 import("countrysideR.dsp");
 import("CitySkylineL.dsp");
@@ -158,7 +159,7 @@ movCar(i) = movingCar(distance) : *(v) : sourceSpatXY(x,y) :
 spatSound(0) = helicopter_0 , (%(SR*5) ~+(1) : int) : rdtable*helicopter_gain*0.9: sourceSpatInst(0);
 
 // countryside soundscape
-countryScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain), (countrysideR_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain) : stereoToSoundScape;
+countryScape = (Country_Mono_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain), (Country_Mono_0, (%(295877) ~+(1) : int) : rdtable*0.05*countrySoundscape_gain) : stereoToSoundScape;
 
 // farm soundscape
 //farmScape = (countrysideL_0, (%(295877) ~+(1) : int) : rdtable*0.05*farmSoundscape_gain), (countrysideR_0, (%(295877) ~+(1) : int) : rdtable*0.05*farmSoundscape_gain) : stereoToSoundScape;
@@ -298,7 +299,8 @@ woobwoob_s = police_0 , ((min(207137)*on) ~+(1) : int) : rdtable : sourceSpatXY(
 };
 
 // Global gain on Meyer speakers
-meyerGain = hslider("Meyer_Gain",0.03,0.0,1.0,0.01); 
+meyerGain = hslider("Meyer_Gain",0.01,0.0,1.0,0.01); // 0.01 = -40dB 
+
 // Another gain for sounds designated as 'ambient'
 ambientGain = hslider("Ambient_Gain",0.5,0.0,1.0,0.01);
 
