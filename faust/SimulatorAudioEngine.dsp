@@ -48,8 +48,12 @@ import("BlindSpot.dsp");
 import("EmVehicle.dsp");
 import("Tailgate.dsp");
 
-// Questionnaire Prompt
+// Questionnaire Prompts
 import("questionnaire.dsp");
+import("end_speech.dsp");
+
+// Indicator noise
+import("indicator.dsp");
 
 //#######################
 // PARAMETERS
@@ -400,6 +404,23 @@ Questionnaire = questionnaire_0 , ((min(130560)*on) ~+(1) : int) : rdtable :  qu
 		y = 0;
 	};
 
+EndSpeech = end_speech_0 , ((min(438272)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain))
+	with{
+		on = checkbox("h:e/o");
+		x = 0;
+		y = 0;
+	};
+
+Indicator = indicator_0, (min(45000) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	par(i,4,*(meyerGain))
+	with{
+		on = checkbox("h:i/o");
+		x = 0;
+		y = 0;
+	};
+
+
 // car speakers output
 ownshipOut = par(i,4,ownshipFilter	(ownship_freq)),ownshipSubFilter(90);
 
@@ -414,12 +435,14 @@ carSub) =
 // Audio Icons (meyer speakers)
 meyerOut =
 	Questionnaire,
+	EndSpeech,
+	Indicator,
 	tailgate,
 	emVehicle,
 	blindSpot,
 	obstacle,
 	//getpassed_1,
-	pass,
+	//pass,
 	//takeover_1,
 	//giveback_1,
 	slowdown_1,
