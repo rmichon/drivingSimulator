@@ -53,7 +53,7 @@ import("questionnaire.dsp");
 import("end_speech.dsp");
 
 // Indicator noise
-import("indicator.dsp");
+import("Indicator.dsp");
 
 //#######################
 // PARAMETERS
@@ -370,11 +370,11 @@ speedup_1 = SpeedUp_1_0 , ((min(245760)*on) ~+(1) : int) : rdtable :  quadSpatXY
 
 // Car in Blind Spot Icon
 blindSpot = BlindSpot_0 , ((min(888832)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
-	par(i,4,*(meyerGain*ambientGain))
+	par(i,4,*(meyerGain*(ambientGain*1.5)))
 	with{
 		on = checkbox("h:bs/o");
-		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/25 : smooth(0.999);
-		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/25 : smooth(0.999);
+		x = hslider("h:bs/x[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
+		y = hslider("h:bs/y[style:knob]",0,-50,50,0.01)/75 : smooth(0.999);
 	};
 
 // Emergency Vehicle Icon
@@ -400,24 +400,27 @@ Questionnaire = questionnaire_0 , ((min(130560)*on) ~+(1) : int) : rdtable :  qu
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:q/o");
-		x = 0;
-		y = 0;
+		x = -.001;
+		y = 0.15;
 	};
 
 EndSpeech = end_speech_0 , ((min(438272)*on) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:e/o");
-		x = 0;
-		y = 0;
+		x = -.001;
+		y = 0.15;
 	};
 
-Indicator = indicator_0, (min(45000) ~+(1) : int) : rdtable :  quadSpatXY(x,y) :
+	indicator = Indicator_0, ((min(45000)*on) ~+(1) : int) : rdtable : resonlp(fc,Q,gain) : quadSpatXY(x,y) :
 	par(i,4,*(meyerGain))
 	with{
 		on = checkbox("h:i/o");
-		x = 0;
-		y = 0;
+		x = -0.01;
+		y = 0.15;
+		fc = 1000;
+		Q = 1;
+		gain = 0.8;
 	};
 
 
@@ -436,7 +439,7 @@ carSub) =
 meyerOut =
 	Questionnaire,
 	EndSpeech,
-	Indicator,
+	indicator,
 	tailgate,
 	emVehicle,
 	blindSpot,
